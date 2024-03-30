@@ -10,7 +10,7 @@ import (
 	"github.com/Cacsjep/goxis/pkg/axmanifest"
 )
 
-const VERSION = "1.0.1"
+const VERSION = "1.1.1"
 
 func main() {
 	showHelp := flag.Bool("h", false, "Displays this help message.")
