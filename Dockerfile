@@ -104,6 +104,7 @@ ENV GOARCH=${GO_ARCH}
 ENV GOARM=${GO_ARM}
 ENV APP_NAME=${APP_NAME}
 ENV MANIFEST=${APP_MANIFEST}
+RUN echo "Building ${APP_NAME} with ${GO_APP} and manifest ${APP_MANIFEST}"
 RUN . /opt/axis/acapsdk/environment-setup* && \
     if [ "${COMP_LIBAV}" = "YES" ]; then \
         export CGO_LDFLAGS="-L${FF_BUILD_DIR}/lib/" && \
