@@ -15,7 +15,6 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
-	"github.com/docker/docker/pkg/archive"
 	"github.com/vbauerster/mpb"
 	"github.com/vbauerster/mpb/decor"
 )
@@ -67,11 +66,10 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 	if err != nil {
 		return fmt.Errorf("failed to create current dir: %w", err)
 	}
-	buildContext, err := archive.TarWithOptions(currentDir, &archive.TarOptions{})
+	buildContext, err := createBuildContext(currentDir)
 	if err != nil {
 		return fmt.Errorf("failed to create build context: %w", err)
 	}
-	defer buildContext.Close()
 
 	options := types.ImageBuildOptions{
 		Dockerfile: "Dockerfile",
