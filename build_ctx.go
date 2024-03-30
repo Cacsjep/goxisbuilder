@@ -14,6 +14,7 @@ import (
 // Embed your Dockerfile
 //
 //go:embed Dockerfile
+//go:embed generate_makefile.py
 var embeddedFiles embed.FS
 
 // createBuildContext generates the build context including the current directory and the embedded Dockerfile.
@@ -73,6 +74,22 @@ func createBuildContext(baseDir string) (io.Reader, error) {
 		return nil, err
 	}
 	if _, err := tw.Write(dockerfileData); err != nil {
+		return nil, err
+	}
+
+	// Add the embedded generate_makefile.py
+	genMakeData, err := fs.ReadFile(embeddedFiles, "generate_makefile.py")
+	if err != nil {
+		return nil, fmt.Errorf("error reading embedded generate_makefile.py: %w", err)
+	}
+	if err := tw.WriteHeader(&tar.Header{
+		Name: "generate_makefile.py",
+		Mode: 0600,
+		Size: int64(len(genMakeData)),
+	}); err != nil {
+		return nil, err
+	}
+	if _, err := tw.Write(genMakeData); err != nil {
 		return nil, err
 	}
 
