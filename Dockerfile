@@ -46,6 +46,7 @@ ARG FFMPEG_VERSION=n5.1.2
 ARG CROSS_PREFIX=
 RUN mkdir -p ${FF_BUILD_DIR} && \
     if [ "${COMP_LIBAV}" = "YES" ]; then \
+      echo "Building FFmpeg" && \
       git clone https://github.com/FFmpeg/FFmpeg.git ${FF_BUILD_DIR}/ffmpeg && \
       cd ${FF_BUILD_DIR}/ffmpeg && \
       git checkout ${FFMPEG_VERSION} && \

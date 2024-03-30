@@ -147,7 +147,7 @@ func listEapDirectory() {
 }
 
 func printCompatibility(buildConfig *BuildConfiguration) {
-	fmt.Println("Acap Compatibility:")
+	fmt.Println("\n\nAcap Compatibility:")
 	// Maps for SDK to Firmware compatibility
 	sdkToFirmware := map[string]string{
 		"3.0": "9.70 and later",

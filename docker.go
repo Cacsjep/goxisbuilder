@@ -11,12 +11,12 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 	"github.com/vbauerster/mpb"
-	"github.com/vbauerster/mpb/decor"
 )
 
 // newDockerClient initializes a new Docker client
@@ -41,13 +41,9 @@ func buildAndRunContainer(ctx context.Context, cli *client.Client, bc *BuildConf
 		return fmt.Errorf("create container failed: %w", err)
 	}
 
-	fmt.Printf("Container '%s' created and started \033[32msuccessfully\033[0m.\n", bc.ImageName)
-
 	if err := copyFromContainer(ctx, cli, containerID); err != nil {
 		return fmt.Errorf("copy eap failed: %w", err)
 	}
-
-	fmt.Printf("Eap folder from '%s' copied \033[32msuccessfully\033[0m.\n", bc.ImageName)
 
 	if err := cli.ContainerStop(ctx, containerID, container.StopOptions{}); err != nil {
 		panic(err)
@@ -104,7 +100,7 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 	stepRegexp := regexp.MustCompile(`Step (\d+)/(\d+)`)
 	errorRegexp := regexp.MustCompile(`(?i)(error|failed|Illegal|cannot|could not|can't|\bfail\b|panic:|undefined|missing|expected|unexpected|cannot find package|no package found)`)
 	p := mpb.New(mpb.WithWidth(60))
-	var bar *mpb.Bar
+	var bar *ProgressBar
 	currentStep, totalSteps := 0, 0
 	errorsDetected := false
 	var errorMessages []string
@@ -127,6 +123,9 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 		if stream, ok := m["stream"].(string); ok {
 
 			log.Print(stream)
+			if bar != nil {
+				bar.Render()
+			}
 
 			if errorsDetected {
 				// Accumulate error messages after an error has been detected
@@ -139,7 +138,7 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 				errorsDetected = true
 				errorMessages = append(errorMessages, stream) // Capture the first error message
 				if bar != nil {
-					bar.SetTotal(int64(totalSteps), true) // Complete the progress bar
+					bar.Complete()
 				}
 				continue
 			}
@@ -150,12 +149,18 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 				if newTotal > totalSteps {
 					totalSteps = newTotal
 					if bar == nil {
-						bar = p.AddBar(int64(totalSteps),
-							mpb.PrependDecorators(decor.Name("Build progress: "), decor.Percentage()),
-							mpb.AppendDecorators(decor.OnComplete(decor.EwmaETA(decor.ET_STYLE_MMSS, 60), "Done!")),
-						)
+						steps := totalSteps
+						if bc.DoInstall {
+							steps++
+						}
+						if bc.DoStart {
+							steps++
+						}
+						bar = &ProgressBar{current: 0, total: steps, prefix: "Starting...", spinner: []string{"-", "/", "|", "\\"}}
+						bar.StartSpinner()
+
 					} else {
-						bar.SetTotal(int64(totalSteps), false)
+						bar.SetTotal(totalSteps)
 					}
 				}
 
@@ -163,6 +168,52 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 					bar.Increment()
 					currentStep++
 				}
+			}
+
+			if strings.Contains(stream, "ARG ARCH") {
+				bar.SetPrefix("Docker prepare image...")
+			}
+
+			if strings.Contains(stream, "RUN apt-get update") {
+				bar.SetPrefix("Install packages (apt)...")
+			}
+
+			if strings.Contains(stream, "ARG GOLANG_VERSION") {
+				bar.SetPrefix("Install golang ...")
+			}
+
+			if strings.Contains(stream, "Building FFmpeg") {
+				bar.SetPrefix("Build libav ...")
+			}
+
+			if strings.Contains(stream, "RUN python ge") {
+				bar.SetPrefix("Generate Makefile ...")
+			}
+
+			if strings.Contains(stream, "RUN . /opt/axis/acapsdk/environment-setup") {
+				bar.SetPrefix("Prepare application...")
+			}
+
+			if strings.Contains(stream, "go build -ldfl") {
+				bar.SetPrefix("Building application...")
+			}
+
+			if strings.Contains(stream, "Create pack") {
+				bar.SetPrefix("Create package...")
+			}
+
+			if strings.Contains(stream, "installing") {
+				bar.SetPrefix("Install package...")
+				bar.Increment()
+			}
+
+			if strings.Contains(stream, "starting") {
+				bar.SetPrefix("Starting package...")
+				bar.Increment()
+			}
+
+			if strings.Contains(stream, "RUN mv *.eap /opt/eap") {
+				bar.SetPrefix("Copy package...")
 			}
 		}
 	}

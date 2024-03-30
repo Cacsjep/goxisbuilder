@@ -7,6 +7,7 @@ require (
 	github.com/Snawoot/go-http-digest-auth-client v1.1.3
 	github.com/docker/docker v26.0.0+incompatible
 	github.com/vbauerster/mpb v3.4.0+incompatible
+	golang.org/x/term v0.18.0
 )
 
 require (
@@ -33,8 +34,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
 	golang.org/x/crypto v0.19.0 // indirect
 	golang.org/x/mod v0.13.0 // indirect
-	golang.org/x/sys v0.17.0 // indirect
-	golang.org/x/term v0.17.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/time v0.0.0-20220210224613-90d013bbcef8 // indirect
 	golang.org/x/tools v0.14.0 // indirect
 	google.golang.org/grpc v1.58.3 // indirect
