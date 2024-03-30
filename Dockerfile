@@ -64,9 +64,9 @@ RUN mkdir -p ${FF_BUILD_DIR} && \
         --enable-parser=h264,mjpeg,hevc,aac,mp3 \
         --enable-bsf=h264_metadata,h264_mp4toannexb,hevc_metadata,hevc_mp4toannexb,aac_adtstoasc \
         --enable-protocol=file,rtmp,rtmpt,rtp,data,tcp,pipe,hls \
-        --enable-encoder=h264,mjpeg,hevc \
-        --enable-decoder=h264,mjpeg,hevc \
-        --enable-muxer=flv,h264,mjpeg,hevc,mov,mpegts \
+        --enable-encoder=h264,mjpeg,hevc,aac,mp3 \
+        --enable-decoder=h264,mjpeg,hevc,aac,mp3 \
+        --enable-muxer=flv,h264,mjpeg,hevc,mov,mpegts,aac,mp3 \
         --enable-gpl \
         --enable-small \
         --disable-doc \
