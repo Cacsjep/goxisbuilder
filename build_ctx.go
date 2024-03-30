@@ -9,6 +9,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // Embed your Dockerfile
@@ -22,7 +23,11 @@ func createBuildContext(baseDir string) (io.Reader, error) {
 	buf := new(bytes.Buffer)
 	tw := tar.NewWriter(buf)
 
-	// Add the current directory to the tar
+	// Correctly handle paths by ensuring they use Unix-style separators
+	fixPathSeparator := func(path string) string {
+		return strings.ReplaceAll(path, `\`, `/`) // Replace Windows-style separators
+	}
+
 	err := filepath.Walk(baseDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -31,16 +36,21 @@ func createBuildContext(baseDir string) (io.Reader, error) {
 		if path == baseDir {
 			return nil
 		}
+		// Ensure file paths use Unix-style separators
+		fixedPath := fixPathSeparator(path)
+
 		// Create header
-		header, err := tar.FileInfoHeader(info, "")
+		header, err := tar.FileInfoHeader(info, fixedPath)
 		if err != nil {
 			return err
 		}
-		// Ensure header name is relative to base directory
+		// Adjust header name to be relative to base directory and use correct path separators
 		header.Name, err = filepath.Rel(baseDir, path)
 		if err != nil {
 			return err
 		}
+		header.Name = fixPathSeparator(header.Name) // Ensure Unix-style separators in the tarball
+
 		if err := tw.WriteHeader(header); err != nil {
 			return err
 		}
