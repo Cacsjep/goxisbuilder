@@ -1,6 +1,7 @@
 ## Goxisbuilder
 
 Goxisbuilder is a powerful command-line tool designed to streamline the process of building Docker ACAP applications for Go developers. 
+Its main purpose is to build apps with [goxis](https://github.com/Cacsjep/goxis).
 
 ```shell
 go install github.com/Cacsjep/goxisbuilder@latest
