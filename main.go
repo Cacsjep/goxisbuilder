@@ -43,6 +43,11 @@ func main() {
 		handleError("Failed create new docker client", err)
 	}
 
+	if *appDirectory == "" {
+		fmt.Println("-appdir", "is required")
+		os.Exit(1)
+	}
+
 	manifestPathFull := path.Join(*appDirectory, *manifestPath)
 	amf, err := axmanifest.LoadManifest(manifestPathFull)
 	if err != nil {
