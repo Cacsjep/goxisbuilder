@@ -156,6 +156,9 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 						if bc.DoStart {
 							steps++
 						}
+						if bc.Watch {
+							steps++
+						}
 						bar = &ProgressBar{current: 0, total: steps, prefix: "Starting...", spinner: []string{"-", "/", "|", "\\"}}
 						bar.StartSpinner()
 
