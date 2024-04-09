@@ -38,7 +38,7 @@ RUN mkdir -p "${GOPATH}/src" "${GOPATH}/bin" "${GOPATH}/pkg" \
 ### Golang End
 
 #-------------------------------------------------------------------------------
-# Gstreamer build
+# libav build
 #-------------------------------------------------------------------------------
 ARG FF_BUILD_DIR=/opt/build
 ARG COMP_LIBAV=
