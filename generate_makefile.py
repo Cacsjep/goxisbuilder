@@ -17,7 +17,7 @@ def create_makefile(app_name, appdir, manifest_file_name):
     makefile_content = f"""
 .PHONY: build
 build:
-\tgo build -tags cl12 -ldflags "-s -w  -extldflags '-L./lib -Wl,-rpath,./lib'" -o {app_name} .
+\tgo build -ldflags "-s -w  -extldflags '-L./lib -Wl,-rpath,./lib'" -o {app_name} .
 """
 
     # Write the Makefile
