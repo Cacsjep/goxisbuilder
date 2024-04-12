@@ -68,10 +68,11 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 	}
 
 	var dfile string
-	if bc.Dockerfile != "" {
+	if bc.Dockerfile == "" {
 		dfile = "DockerFile"
 	} else {
 		dfile = bc.Dockerfile
+		fmt.Println("Using custom dockerfile: ", dfile)
 	}
 
 	options := types.ImageBuildOptions{
