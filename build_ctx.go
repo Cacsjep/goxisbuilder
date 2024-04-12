@@ -19,7 +19,7 @@ import (
 var embeddedFiles embed.FS
 
 // createBuildContext generates the build context including the current directory and the embedded Dockerfile.
-func createBuildContext(baseDir string) (io.Reader, error) {
+func createBuildContext(baseDir string, dockerfile string) (io.Reader, error) {
 	buf := new(bytes.Buffer)
 	tw := tar.NewWriter(buf)
 
@@ -71,11 +71,21 @@ func createBuildContext(baseDir string) (io.Reader, error) {
 		return nil, fmt.Errorf("error adding current directory to tar: %w", err)
 	}
 
-	// Add the embedded Dockerfile
-	dockerfileData, err := fs.ReadFile(embeddedFiles, "Dockerfile")
-	if err != nil {
-		return nil, fmt.Errorf("error reading embedded Dockerfile: %w", err)
+	var dockerfileData []byte
+	if dockerfile == "" {
+		dockerfileData, err = fs.ReadFile(embeddedFiles, "Dockerfile")
+		if err != nil {
+			return nil, fmt.Errorf("error reading embedded Dockerfile: %w", err)
+		}
+	} else {
+		dockerfileData, err = os.ReadFile(dockerfile)
+		if err != nil {
+			return nil, fmt.Errorf("error reading custom Dockerfile: %w", err)
+		}
+		fmt.Println("Using custom dockerfile: ", dockerfile)
 	}
+
+	// Add the embedded Dockerfile
 	if err := tw.WriteHeader(&tar.Header{
 		Name: "Dockerfile",
 		Mode: 0600,

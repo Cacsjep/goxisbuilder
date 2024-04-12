@@ -62,21 +62,14 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 	if err != nil {
 		return fmt.Errorf("failed to create current dir: %w", err)
 	}
-	buildContext, err := createBuildContext(currentDir)
+
+	buildContext, err := createBuildContext(currentDir, bc.Dockerfile)
 	if err != nil {
 		return fmt.Errorf("failed to create build context: %w", err)
 	}
 
-	var dfile string
-	if bc.Dockerfile == "" {
-		dfile = "DockerFile"
-	} else {
-		dfile = bc.Dockerfile
-		fmt.Println("Using custom dockerfile: ", dfile)
-	}
-
 	options := types.ImageBuildOptions{
-		Dockerfile: dfile,
+		Dockerfile: "Dockerfile",
 		Tags:       []string{bc.ImageName},
 		BuildArgs: map[string]*string{
 			"ARCH":           ptr(bc.Arch),
