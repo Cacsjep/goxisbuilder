@@ -26,4 +26,5 @@ type BuildConfiguration struct {
 	CrossPrefix   string
 	LowestSdk     bool
 	Watch         bool
+	Dockerfile    string
 }

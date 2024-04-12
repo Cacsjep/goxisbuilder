@@ -17,6 +17,7 @@ func main() {
 	showVersion := flag.Bool("v", false, "Displays builders version.")
 	ip := flag.String("ip", "", "The IP address of the camera where the EAP application is installed.")
 	manifestPath := flag.String("manifest", "manifest.json", "The path to the manifest file. Defaults to 'manifest.json'.")
+	dockerFile := flag.String("dockerfile", "", "Use a custom docker file'.")
 	pwd := flag.String("pwd", "", "The root password for the camera where the EAP application is installed.")
 	arch := flag.String("arch", "aarch64", "The architecture for the ACAP application: 'aarch64' or 'armv7hf'.")
 	doStart := flag.Bool("start", false, "Set to true to start the application after installation.")
@@ -66,6 +67,7 @@ func main() {
 		LowestSdk:    *lowestSdkVersion,
 		WithLibav:    *withLibav,
 		Watch:        *watch,
+		Dockerfile:   *dockerFile,
 	}
 	// Configure SDK and architecture for the specific app
 	configureSdk(*lowestSdkVersion, &buildConfig)

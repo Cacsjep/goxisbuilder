@@ -67,8 +67,15 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 		return fmt.Errorf("failed to create build context: %w", err)
 	}
 
+	var dfile string
+	if bc.Dockerfile != "" {
+		dfile = "DockerFile"
+	} else {
+		dfile = bc.Dockerfile
+	}
+
 	options := types.ImageBuildOptions{
-		Dockerfile: "Dockerfile",
+		Dockerfile: dfile,
 		Tags:       []string{bc.ImageName},
 		BuildArgs: map[string]*string{
 			"ARCH":           ptr(bc.Arch),

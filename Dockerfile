@@ -96,9 +96,6 @@ WORKDIR ${APP_DIR}
 RUN python generate_makefile.py ${APP_NAME} ${GO_APP} ${APP_MANIFEST}
 WORKDIR ${APP_DIR}/${GO_APP}
 
-#-------------------------------------------------------------------------------
-# Perpare final build of golang acap app, check for install and start 
-#-------------------------------------------------------------------------------
 ENV CGO_ENABLED=1
 ENV GOOS=linux
 ENV GOARCH=${GO_ARCH}
