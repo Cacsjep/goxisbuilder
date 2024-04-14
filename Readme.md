@@ -33,6 +33,7 @@ Ensure that your application directory is properly structured and contains these
 | `-h`              | Displays this help message.                                                                                                      |                   |
 | `-appdir`         | The full path to the application directory from which to build.                                                                  | required          |
 | `-arch`           | The architecture for the ACAP application: 'aarch64' or 'armv7hf'.                                                               | `"aarch64"`       |
+| `-dockerfile`     | Use your own dockerfile                                                                                                          | `""`       |
 | `-build-examples` | Set to true to build example applications.                                                                                       | `false`           |
 | `-install`        | Set to true to install the application on the camera.                                                                            | `false`           |
 | `-libav`          | Set to true to compile libav for binding with go-astiav.                                                                         | `false`           |
