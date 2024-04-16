@@ -10,7 +10,7 @@ import (
 	"github.com/Cacsjep/goxis/pkg/axmanifest"
 )
 
-const VERSION = "1.3.1"
+const VERSION = "1.4.0"
 
 func main() {
 	showHelp := flag.Bool("h", false, "Displays this help message.")
@@ -26,6 +26,7 @@ func main() {
 	watch := flag.Bool("watch", false, "Set to true to monitor the package log after building.")
 	appDirectory := flag.String("appdir", "", "The full path to the application directory from which to build.")
 	withLibav := flag.Bool("libav", false, "Set to true to compile libav for binding with go-astiav.")
+	filesToAdd := flag.String("files", "", "Add additional files to the container. (filename1 filename2 ...), files need to be in appdir")
 	flag.Parse()
 
 	if *showHelp {
@@ -68,6 +69,7 @@ func main() {
 		WithLibav:    *withLibav,
 		Watch:        *watch,
 		Dockerfile:   *dockerFile,
+		FilesToAdd:   *filesToAdd,
 	}
 	// Configure SDK and architecture for the specific app
 	configureSdk(*lowestSdkVersion, &buildConfig)

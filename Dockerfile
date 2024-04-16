@@ -89,6 +89,7 @@ ARG IP_ADDR=
 ARG PASSWORD= 
 ARG START=
 ARG INSTALL=
+ARG FILES_TO_ADD_TO_ACAP=
 ARG GO_APP=test
 ENV GO_APP=${GO_APP}
 COPY . ${APP_DIR}
@@ -110,7 +111,7 @@ RUN . /opt/axis/acapsdk/environment-setup* && \
         mkdir lib && \
         cp -a ${APP_DIR}/lib .; \
     fi && \
-    acap-build . && \
+    acap-build . ${FILES_TO_ADD_TO_ACAP} && \
     if [ "${INSTALL}" = "YES" ]; then eap-install.sh ${IP_ADDR} ${PASSWORD} install; fi && \
     if [ "${START}" = "YES" ]; then eap-install.sh start; fi
 

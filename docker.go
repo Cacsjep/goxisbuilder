@@ -68,6 +68,14 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 		return fmt.Errorf("failed to create build context: %w", err)
 	}
 
+	files_to_add := ""
+	if bc.FilesToAdd != "" {
+		files := strings.Split(bc.FilesToAdd, " ")
+		for _, file := range files {
+			files_to_add += fmt.Sprintf("-a %s ", file)
+		}
+	}
+
 	options := types.ImageBuildOptions{
 		Dockerfile: "Dockerfile",
 		Tags:       []string{bc.ImageName},
@@ -87,6 +95,7 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 			"GO_APP":         ptr(bc.AppDirectory),
 			"CROSS_PREFIX":   ptr(bc.CrossPrefix),
 			"COMP_LIBAV":     ptr(boolToStr(bc.WithLibav)),
+			"FILES_TO_ADD":   ptr(files_to_add),
 		},
 		Remove: true,
 	}

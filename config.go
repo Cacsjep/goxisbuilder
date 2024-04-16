@@ -27,4 +27,5 @@ type BuildConfiguration struct {
 	LowestSdk     bool
 	Watch         bool
 	Dockerfile    string
+	FilesToAdd    string
 }
