@@ -102,7 +102,9 @@ ENV GOOS=linux
 ENV GOARCH=${GO_ARCH}
 ENV GOARM=${GO_ARM}
 ENV APP_NAME=${APP_NAME}
+ENV ACAP_FILES=${FILES_TO_ADD_TO_ACAP}
 ENV MANIFEST=${APP_MANIFEST}
+RUN echo ${ACAP_FILES}
 RUN . /opt/axis/acapsdk/environment-setup* && \
     if [ "${COMP_LIBAV}" = "YES" ]; then \
         export CGO_LDFLAGS="-L${FF_BUILD_DIR}/lib/" && \
@@ -111,7 +113,7 @@ RUN . /opt/axis/acapsdk/environment-setup* && \
         mkdir lib && \
         cp -a ${APP_DIR}/lib .; \
     fi && \
-    acap-build . ${FILES_TO_ADD_TO_ACAP} && \
+    acap-build . ${ACAP_FILES} && \
     if [ "${INSTALL}" = "YES" ]; then eap-install.sh ${IP_ADDR} ${PASSWORD} install; fi && \
     if [ "${START}" = "YES" ]; then eap-install.sh start; fi
 
