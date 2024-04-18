@@ -7,6 +7,8 @@ Its main purpose is to build apps with [goxis](https://github.com/Cacsjep/goxis)
 go install github.com/Cacsjep/goxisbuilder@latest
 ```
 
+[![Discord](https://img.shields.io/badge/Discord-Join%20us-blue?style=for-the-badge&logo=discord)](https://discord.gg/we6EqDSJ)
+
 ### Application Structure Requirements
 Before building an ACAP application with Goxisbuilder, you need to prepare your application directory. This directory should contain all the necessary components for your application to be successfully built:
 
