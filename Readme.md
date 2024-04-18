@@ -22,6 +22,8 @@ Ensure that your application directory is properly structured and contains these
 
 > Ensure that the LICENSE and manifest.json files are correctly formatted and contain all necessary information as per your application's requirements.
 
+> Goxisbuilder execute "docker system prune -f" to remove dangling images 
+
 ### Usage
 
 ```shell
@@ -34,12 +36,33 @@ Ensure that your application directory is properly structured and contains these
 | `-appdir`         | The full path to the application directory from which to build.                                                                  | required          |
 | `-arch`           | The architecture for the ACAP application: 'aarch64' or 'armv7hf'.                                                               | `"aarch64"`       |
 | `-dockerfile`     | Use your own dockerfile                                                                                                          | `""`       |
-| `-build-examples` | Set to true to build example applications.                                                                                       | `false`           |
+| `-files`          | Files for adding to the acap eap package like larod models (filename1 filename2 ...)                                             | `""`       |
 | `-install`        | Set to true to install the application on the camera.                                                                            | `false`           |
-| `-libav`          | Set to true to compile libav for binding with go-astiav.                                                                         | `false`           |
 | `-lowsdk`         | Set to true to build for firmware versions greater than 10.9 with SDK version 1.1. This adjusts the manifest to use version 1.3. | `false`           |
 | `-manifest`       | The path to the manifest file. Defaults to 'manifest.json'.                                                                      | `"manifest.json"` |
 | `-ip`             | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
 | `-pwd`            | The root password for the camera where the EAP application is installed.                                                         | `""`              |
 | `-start`          | Set to true to start the application after installation.                                                                         | `false`           |
 | `-watch`          | Set to true to monitor the package log after building.                                                                           | `false`           |
+
+### Customize Docker Build
+You can set your one docker file via `-dockerfile`,
+just use the repo Dockerfile as starting point.
+
+#### Example
+```
+goxisbuilder.exe -appdir="./mycoolacap" -dockerfile="CustomDockerfile"
+```
+
+
+### Additional ACAP/EAP Package files
+Deploying ACAP's for example with Machine Learning models,
+needs to bundle model files into the .eap package.
+
+Just use `-files` arg to tell goxisbuilder which files you want to bundle.
+>This files need also be in **appdir**
+
+#### Example
+```
+goxisbuilder.exe -appdir="./examples/axlarod/object_detection" -files=ssd_mobilenet_v2_coco_quant_postprocess.tflite
+```

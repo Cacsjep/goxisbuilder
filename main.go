@@ -25,7 +25,6 @@ func main() {
 	lowestSdkVersion := flag.Bool("lowsdk", false, "Set to true to build for firmware versions greater than 10.9 with SDK version 1.1. This adjusts the manifest to use version 1.3.")
 	watch := flag.Bool("watch", false, "Set to true to monitor the package log after building.")
 	appDirectory := flag.String("appdir", "", "The full path to the application directory from which to build.")
-	withLibav := flag.Bool("libav", false, "Set to true to compile libav for binding with go-astiav.")
 	filesToAdd := flag.String("files", "", "Add additional files to the container. (filename1 filename2 ...), files need to be in appdir")
 	flag.Parse()
 
@@ -66,10 +65,10 @@ func main() {
 		DoStart:      *doStart,
 		DoInstall:    *doInstall,
 		LowestSdk:    *lowestSdkVersion,
-		WithLibav:    *withLibav,
 		Watch:        *watch,
 		Dockerfile:   *dockerFile,
 		FilesToAdd:   *filesToAdd,
+		ImageName:    fmt.Sprintf("%s:%s", amf.ACAPPackageConf.Setup.AppName),
 	}
 	// Configure SDK and architecture for the specific app
 	configureSdk(*lowestSdkVersion, &buildConfig)
