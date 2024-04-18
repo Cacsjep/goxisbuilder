@@ -10,7 +10,9 @@ go install github.com/Cacsjep/goxisbuilder@latest
 [![Discord](https://img.shields.io/badge/Discord-Join%20us-blue?style=for-the-badge&logo=discord)](https://discord.gg/we6EqDSJ)
 
 ### Application Structure Requirements
-Before building an ACAP application with Goxisbuilder, you need to prepare your application directory. This directory should contain all the necessary components for your application to be successfully built:
+Before building an ACAP application with Goxisbuilder, you need to prepare your application directory. 
+
+This directory should contain all the necessary components for your application to be successfully built:
 
 - **Application Directory**: Your application must reside in its own directory. This directory will contain the files listed below and is referred to by the `-appdir` flag during the build process.
   - **.go File**: A Go source file with a `main` function. This file acts as the entry point of your application.
@@ -19,10 +21,15 @@ Before building an ACAP application with Goxisbuilder, you need to prepare your 
 
 Ensure that your application directory is properly structured and contains these components before proceeding with the build process.
 
+Example:
+ * myacap
+   * *.go (app.go or main.go does not matter) 
+   * manifest.json
+   * LICENSE
+
 ### Important Notes
 > [!IMPORTANT] 
-> The `-appdir` flag is required. It specifies the directory of the application you wish to build. 
-> This directory must contain a ***.go*** file with main function, a ***LICENSE*** file, and a ***manifest.json*** file.
+> The `-appdir` flag is required. It specifies the directory of the application you wish to build. This directory must contain a ***.go*** file with main function, a ***LICENSE*** file, and a ***manifest.json*** file.
 
 > [!IMPORTANT] 
 > Ensure that the ***LICENSE*** and ***manifest.json*** files are correctly formatted and contain all necessary information as per your application's requirements.
