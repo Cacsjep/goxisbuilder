@@ -22,7 +22,7 @@ Ensure that your application directory is properly structured and contains these
 ### Important Notes
 > [!IMPORTANT] 
 > The `-appdir` flag is required. It specifies the directory of the application you wish to build. 
-This directory must contain a ***.go*** file with main function, a ***LICENSE*** file, and a ***manifest.json*** file.
+> This directory must contain a ***.go*** file with main function, a ***LICENSE*** file, and a ***manifest.json*** file.
 
 > [!IMPORTANT] 
 > Ensure that the ***LICENSE*** and ***manifest.json*** files are correctly formatted and contain all necessary information as per your application's requirements.
