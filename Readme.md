@@ -43,20 +43,20 @@ Example:
 .\goxisbuilder.exe -appdir="mycoolacap"
 ```
 
-| Flag              | Description                                                                                                                      | Default           |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `-h`              | Displays this help message.                                                                                                      |                   |
-| `-appdir`         | The full path to the application directory from which to build.                                                                  | required          |
-| `-arch`           | The architecture for the ACAP application: 'aarch64' or 'armv7hf'.                                                               | `"aarch64"`       |
-| `-dockerfile`     | Use your own dockerfile                                                                                                          | `""`       |
-| `-files`          | Files for adding to the acap eap package like larod models (filename1 filename2 ...)                                             | `""`       |
-| `-install`        | Set to true to install the application on the camera.                                                                            | `false`           |
-| `-lowsdk`         | Set to true to build for firmware versions greater than 10.9 with SDK version 1.1. This adjusts the manifest to use version 1.3. | `false`           |
-| `-manifest`       | The path to the manifest file. Defaults to 'manifest.json'.                                                                      | `"manifest.json"` |
-| `-ip`             | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
-| `-pwd`            | The root password for the camera where the EAP application is installed.                                                         | `""`              |
-| `-start`          | Set to true to start the application after installation.                                                                         | `false`           |
-| `-watch`          | Set to true to monitor the package log after building.                                                                           | `false`           |
+| Flag                | Description                                                                                                                      | Default           |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `-h`                | Displays this help message.                                                                                                      |                   |
+| `-appdir`           | The full path to the application directory from which to build.                                                                  | required          |
+| `-arch`             | The architecture for the ACAP application: 'aarch64' or 'armv7hf'.                                                               | `"aarch64"`       |
+| `-dockerfile`       | Use your own dockerfile                                                                                                          | `""`       |
+| `-files`            | Files for adding to the acap eap package like larod models (filename1 filename2 ...)                                             | `""`       |
+| `-install`          | Set to true to install the application on the camera.                                                                            | `false`           |
+| `-lowsdk`           | Set to true to build for firmware versions greater than 10.9 with SDK version 1.1. This adjusts the manifest to use version 1.3. | `false`           |
+| `-manifest`         | The path to the manifest file. Defaults to 'manifest.json'.                                                                      | `"manifest.json"` |
+| `-ip`               | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
+| `-pwd`              | The root password for the camera where the EAP application is installed.                                                         | `""`              |
+| `-start`            | Set to true to start the application after installation.                                                                         | `false`           |
+| `-watch`            | Set to true to monitor the package log after building.                                                                           | `false`           |
 
 ### Customize Docker Build
 You can set your one docker file via `-dockerfile`,
