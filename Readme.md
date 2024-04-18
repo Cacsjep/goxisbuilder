@@ -73,6 +73,8 @@ Deploying ACAP's for example with Machine Learning models,
 needs to bundle model files into the .eap package.
 
 Just use `-files` arg to tell goxisbuilder which files you want to bundle.
+
+> [!IMPORTANT] 
 >This files need also be in **appdir**
 
 #### Example
