@@ -21,14 +21,13 @@ This directory should contain all the necessary components for your application 
 
 Ensure that your application directory is properly structured and contains these components before proceeding with the build process.
 
-Example:
-myproject
- go.sum
- go.mod
- * myacap
-   * *.go (app.go or main.go does not matter) 
-   * manifest.json
-   * LICENSE
+* myproject
+   * go.sum
+   * go.mod
+     * myacap
+       * *.go (app.go or main.go does not matter) 
+       * manifest.json
+       * LICENSE
 
 ### Important Notes
 > [!IMPORTANT] 
