@@ -22,12 +22,18 @@ This directory should contain all the necessary components for your application 
 Ensure that your application directory is properly structured and contains these components before proceeding with the build process.
 
 Example:
+myproject
+ go.sum
+ go.mod
  * myacap
    * *.go (app.go or main.go does not matter) 
    * manifest.json
    * LICENSE
 
 ### Important Notes
+> [!IMPORTANT] 
+> goxisbuilder needs to be executed in a go project, so before run goxisbuilder initalize a new project with `go mod init myproject`
+
 > [!IMPORTANT] 
 > The `-appdir` flag is required. It specifies the directory of the application you wish to build. This directory must contain a ***.go*** file with main function, a ***LICENSE*** file, and a ***manifest.json*** file.
 
