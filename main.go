@@ -68,7 +68,7 @@ func main() {
 		Watch:        *watch,
 		Dockerfile:   *dockerFile,
 		FilesToAdd:   *filesToAdd,
-		ImageName:    fmt.Sprintf("%s:%s", amf.ACAPPackageConf.Setup.AppName),
+		ImageName:    fmt.Sprintf("%s:%s", *arch, amf.ACAPPackageConf.Setup.AppName),
 	}
 	// Configure SDK and architecture for the specific app
 	configureSdk(*lowestSdkVersion, &buildConfig)

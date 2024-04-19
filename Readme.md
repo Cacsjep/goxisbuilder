@@ -48,7 +48,7 @@ Example:
 | `-dockerfile`       | Use your own dockerfile                                                                                                          | `""`       |
 | `-files`            | Files for adding to the acap eap package like larod models (filename1 filename2 ...)                                             | `""`       |
 | `-install`          | Set to true to install the application on the camera.                                                                            | `false`           |
-| `-lowsdk`           | Set to true to build with SDK version 1.1.| `false`           |
+| `-lowsdk`           | Set to true to build with acap-sdk version 3.5 and ubunutu 20.04| `false`           |
 | `-manifest`         | The path to the manifest file. Defaults to 'manifest.json'.                                                                      | `"manifest.json"` |
 | `-ip`               | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
 | `-pwd`              | The root password for the camera where the EAP application is installed.                                                         | `""`              |
