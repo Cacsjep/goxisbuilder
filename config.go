@@ -15,12 +15,11 @@ type BuildConfiguration struct {
 	Arch          string
 	DoStart       bool
 	DoInstall     bool
-	BuildExamples bool
+	Prune         bool
 	AppDirectory  string
 	Sdk           string
 	UbunutVersion string
 	Version       string
-	WithLibav     bool
 	GoArch        string
 	GoArm         string
 	CrossPrefix   string

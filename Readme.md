@@ -31,9 +31,6 @@ Example:
 > [!IMPORTANT] 
 > The `-appdir` flag is required. It specifies the directory of the application you wish to build. This directory must contain a ***.go*** file with main function, a ***LICENSE*** file, and a ***manifest.json*** file.
 
-> [!WARNING] 
-> Goxisbuilder execute ```docker system prune -f``` to remove dangling images 
-
 ### Usage
 
 ```shell
@@ -48,7 +45,8 @@ Example:
 | `-dockerfile`       | Use your own dockerfile                                                                                                          | `""`       |
 | `-files`            | Files for adding to the acap eap package like larod models (filename1 filename2 ...)                                             | `""`       |
 | `-install`          | Set to true to install the application on the camera.                                                                            | `false`           |
-| `-lowsdk`           | Set to true to build with acap-sdk version 3.5 and ubunutu 20.04| `false`           |
+| `-prune`            | Set to true execute 'docker system prune -f' after build.                                                                        | `false`           |
+| `-lowsdk`           | Set to true to build with acap-sdk version 3.5 and ubunutu 20.04                                                                 | `false`           |
 | `-manifest`         | The path to the manifest file. Defaults to 'manifest.json'.                                                                      | `"manifest.json"` |
 | `-ip`               | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
 | `-pwd`              | The root password for the camera where the EAP application is installed.                                                         | `""`              |

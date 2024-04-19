@@ -22,6 +22,7 @@ func main() {
 	arch := flag.String("arch", "aarch64", "The architecture for the ACAP application: 'aarch64' or 'armv7hf'.")
 	doStart := flag.Bool("start", false, "Set to true to start the application after installation.")
 	doInstall := flag.Bool("install", false, "Set to true to install the application on the camera.")
+	prune := flag.Bool("prune", false, "Set to true execute 'docker system prune -f' after build.")
 	lowestSdkVersion := flag.Bool("lowsdk", false, "Set to true to build for firmware versions greater than 10.9 with SDK version 1.1. This adjusts the manifest to use version 1.3.")
 	watch := flag.Bool("watch", false, "Set to true to monitor the package log after building.")
 	appDirectory := flag.String("appdir", "", "The full path to the application directory from which to build.")
@@ -68,6 +69,7 @@ func main() {
 		Watch:        *watch,
 		Dockerfile:   *dockerFile,
 		FilesToAdd:   *filesToAdd,
+		Prune:        *prune,
 		ImageName:    fmt.Sprintf("%s:%s", *arch, amf.ACAPPackageConf.Setup.AppName),
 	}
 	// Configure SDK and architecture for the specific app
@@ -80,7 +82,6 @@ func main() {
 
 	printCompatibility(&buildConfig)
 	listEapDirectory()
-	os.Remove("docker-build.log")
 
 	if buildConfig.Watch {
 		watchPackageLog(&buildConfig)

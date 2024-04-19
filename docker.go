@@ -49,10 +49,13 @@ func buildAndRunContainer(ctx context.Context, cli *client.Client, bc *BuildConf
 	if err := cli.ContainerRemove(ctx, containerID, container.RemoveOptions{}); err != nil {
 		panic(err)
 	}
-	err = exec.Command("docker", "system", "prune", "-f").Run()
-	if err != nil {
-		fmt.Printf("Error removing dangling images: %s\n", err)
+	if bc.Prune {
+		err = exec.Command("docker", "system", "prune", "-f").Run()
+		if err != nil {
+			fmt.Printf("Error removing dangling images: %s\n", err)
+		}
 	}
+
 	return nil
 }
 
