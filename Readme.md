@@ -11,7 +11,7 @@ go install github.com/Cacsjep/goxisbuilder@latest
 ### Quick Start (New Project)
 Creating a new project is very handy, it creates an application directory with all the necessary stuff inside. :)
 ```shell
-goxisbuilder.exe -newproject
+goxisbuilder.exe -newapp
 ```
 
 [![Discord](https://img.shields.io/badge/Discord-Join%20us-blue?style=for-the-badge&logo=discord)](https://discord.gg/we6EqDSJ)
@@ -88,6 +88,7 @@ In case of multiple manifest files for an application, you can use the `-manifes
 | `-ip`               | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
 | `-lowsdk`           | Set to true to build with acap-sdk version 3.5 and ubunutu 20.04                                                                 | `false`           |
 | `-manifest`         | The path to the manifest file. Defaults to 'manifest.json'.                                                                      | `"manifest.json"` |
+| `-newapp  `         | Generate a new goxis application                                                                                                 | `false`           |
 | `-prune`            | Set to true execute 'docker system prune -f' after build.                                                                        | `false`           |
 | `-pwd`              | The root password for the camera where the EAP application is installed.                                                         | `""`              |
 | `-start`            | Set to true to start the application after installation.                                                                         | `false`           |
