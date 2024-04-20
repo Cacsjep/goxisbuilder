@@ -12,11 +12,8 @@ import (
 	"github.com/Cacsjep/goxis/pkg/axmanifest"
 )
 
-const VERSION = "1.0.1"
-
 func main() {
 	showHelp := flag.Bool("h", false, "Displays this help message.")
-	showVersion := flag.Bool("v", false, "Displays builders version.")
 	ip := flag.String("ip", "", "The IP address of the camera where the EAP application is installed.")
 	manifestPath := flag.String("manifest", "manifest.json", "The path to the manifest file. Defaults to 'manifest.json'.")
 	dockerFile := flag.String("dockerfile", "", "Use a custom docker file'.")
@@ -34,11 +31,6 @@ func main() {
 
 	if *showHelp {
 		flag.Usage()
-		os.Exit(1)
-	}
-
-	if *showVersion {
-		fmt.Println("Version:", VERSION)
 		os.Exit(1)
 	}
 
