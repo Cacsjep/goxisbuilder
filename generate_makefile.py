@@ -5,8 +5,14 @@ import os
 import sys
 
 def create_makefile(app_name, appdir, manifest_file_name):
-    default_manifest = os.path.join(appdir, "manifest.json")
-    custom_manifest = os.path.join(appdir, manifest_file_name)
+    if appdir != ".":
+        default_manifest = os.path.join(appdir, "manifest.json")
+        custom_manifest = os.path.join(appdir, manifest_file_name)
+        make_file_path = os.path.join(appdir, "Makefile")
+    else:
+        default_manifest = "manifest.json"
+        custom_manifest = manifest_file_name
+        make_file_path = "Makefile"
     if custom_manifest != default_manifest:
         if os.path.exists(default_manifest): 
             os.remove(default_manifest)
@@ -21,14 +27,20 @@ build:
 """
 
     # Write the Makefile
-    with open(os.path.join(appdir, "Makefile"), "w") as makefile:
+    with open(make_file_path, "w") as makefile:
         makefile.write(makefile_content)
-    print("Makefile created successfully.", os.path.join(appdir, "Makefile"))
+    print("Makefile created successfully.", make_file_path)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print("Usage: python generate_makefile.py <appname> <appdir> <manifest_file_name>")
+    if len(sys.argv) == 3:
+        app_name, manifest_file_name = sys.argv[1], sys.argv[2]
+        create_makefile(app_name, ".", manifest_file_name)
+    elif len(sys.argv) == 4:
+        app_name, appdir, manifest_file_name = sys.argv[1], sys.argv[2], sys.argv[3]
+        create_makefile(app_name, appdir, manifest_file_name)
+    else:
+        print("Error executing the python generate_makefile.py")
+        print("Args", sys.argv, len(sys.argv))
         sys.exit(1)
     
-    app_name, appdir, manifest_file_name = sys.argv[1], sys.argv[2], sys.argv[3]
-    create_makefile(app_name, appdir, manifest_file_name)
+    

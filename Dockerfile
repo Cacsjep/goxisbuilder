@@ -58,9 +58,9 @@ RUN . /opt/axis/acapsdk/environment-setup* && \
 #-------------------------------------------------------------------------------
 # Create output directory, we copy files from eap to host
 #-------------------------------------------------------------------------------
-RUN mkdir /opt/eap
-RUN mv *.eap /opt/eap
-RUN cd /opt/eap && \
+RUN mkdir /opt/build
+RUN mv *.eap /opt/build
+RUN cd /opt/build && \
     for file in *.eap; do \
         mv "$file" "${file%.eap}_sdk_${VERSION}.eap"; \
     done

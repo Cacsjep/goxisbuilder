@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 
 	"github.com/Cacsjep/goxis/pkg/axmanifest"
 )
@@ -21,11 +23,12 @@ func main() {
 	pwd := flag.String("pwd", "", "The root password for the camera where the EAP application is installed.")
 	arch := flag.String("arch", "aarch64", "The architecture for the ACAP application: 'aarch64' or 'armv7hf'.")
 	doStart := flag.Bool("start", false, "Set to true to start the application after installation.")
+	createProject := flag.Bool("newproject", false, "Set to true to create a new goxis project.")
 	doInstall := flag.Bool("install", false, "Set to true to install the application on the camera.")
 	prune := flag.Bool("prune", false, "Set to true execute 'docker system prune -f' after build.")
-	lowestSdkVersion := flag.Bool("lowsdk", false, "Set to true to build for firmware versions greater than 10.9 with SDK version 1.1. This adjusts the manifest to use version 1.3.")
+	lowestSdkVersion := flag.Bool("lowsdk", false, "Set to true to build with acap-sdk version 3.5 and ubunutu 20.04")
 	watch := flag.Bool("watch", false, "Set to true to monitor the package log after building.")
-	appDirectory := flag.String("appdir", "", "The full path to the application directory from which to build.")
+	appDirectory := flag.String("appdir", "", "The path to the application directory from which to build, or blank if the current directory is the application directory.")
 	filesToAdd := flag.String("files", "", "Add additional files to the container. (filename1 filename2 ...), files need to be in appdir")
 	flag.Parse()
 
@@ -39,6 +42,10 @@ func main() {
 		os.Exit(1)
 	}
 
+	if *createProject {
+		createNewProject()
+	}
+
 	ctx := context.Background()
 	cli, err := newDockerClient()
 	if err != nil {
@@ -46,8 +53,27 @@ func main() {
 	}
 
 	if *appDirectory == "" {
-		fmt.Println("-appdir", "is required")
-		os.Exit(1)
+		if _, err := os.Stat("go.mod"); errors.Is(err, os.ErrNotExist) {
+			fmt.Println("A go project (go.mod) was not found in the current directory. Or create it (go mod init <module-path>) if you are inside the project directory.")
+			os.Exit(1)
+		}
+		if _, err := os.Stat("LICENSE"); errors.Is(err, os.ErrNotExist) {
+			fmt.Println("A LICENSE file was not found in the current directory. Please specify the app directory with -appdir, or create it if you are inside the project directory.")
+			os.Exit(1)
+		}
+		if _, err := os.Stat("manifest.json"); errors.Is(err, os.ErrNotExist) {
+			fmt.Println("A manifest.json file was not found in the current directory. Please specify the app directory with -appdir, or create it if you are inside the project directory.")
+			os.Exit(1)
+		}
+		files, err := filepath.Glob("*.go")
+		if err != nil {
+			fmt.Println("Failed to search for Go files:", err)
+			os.Exit(1)
+		}
+		if len(files) == 0 {
+			fmt.Println("No Go (.go) files found in the current directory. Please specify the app directory with -appdir, or create it if you are inside the project directory.")
+			os.Exit(1)
+		}
 	}
 
 	manifestPathFull := path.Join(*appDirectory, *manifestPath)

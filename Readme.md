@@ -3,81 +3,95 @@
 Goxisbuilder is a powerful command-line tool designed to streamline the process of building Docker ACAP applications for Go developers. 
 Its main purpose is to build apps with [goxis](https://github.com/Cacsjep/goxis).
 
+### Install
 ```shell
 go install github.com/Cacsjep/goxisbuilder@latest
 ```
 
+### Quick Start (New Project)
+Creating a new project is very handy, it creates an application directory with all the necessary stuff inside. :)
+```shell
+goxisbuilder.exe -newproject
+```
+
 [![Discord](https://img.shields.io/badge/Discord-Join%20us-blue?style=for-the-badge&logo=discord)](https://discord.gg/we6EqDSJ)
 
-### Application Structure Requirements
-Before building an ACAP application with Goxisbuilder, you need to prepare your application directory. 
+### Building Applications
+There are two ways of building apps with goxisbuilder:
+- Inside an application directory
+- Outside an application directory"
 
-This directory should contain all the necessary components for your application to be successfully built:
+#### Inside a Applications Directory
+Build command: `goxisbuilder.exe` or on linux `goxisbuilder`
 
-- **Application Directory**: Your application must reside in its own directory. This directory will contain the files listed below and is referred to by the `-appdir` flag during the build process.
-  - **.go File**: A Go source file with a `main` function. This file acts as the entry point of your application.
-  - **LICENSE**: A file that specifies the licensing terms under which your application is distributed. It's crucial to include this to inform users of how they can legally use your application.
-  - **manifest.json**: A JSON file that provides detailed information about your application, including its name, version, and any dependencies it might have.
+Directory/File Structure:
+* myacap
+   * go.sum
+   * go.mod
+   * *.go (app.go or main.go does not matter) 
+   * manifest.json
+   * LICENSE
 
-Ensure that your application directory is properly structured and contains these components before proceeding with the build process.
+#### Outside a Applications Directory
+Build command: `goxisbuilder.exe -appdir=<application-director>` or on linux `goxisbuilder -appdir=<application-director>`
 
+Directory/File Structure:
 * myproject
    * go.sum
    * go.mod
-     * myacap
-       * *.go (app.go or main.go does not matter) 
+     * myacap1
+       * *.go (It does not matter whether you use app.go or main.go.) 
+       * manifest.json
+       * LICENSE
+     * myacap2
+       * *.go (It does not matter whether you use app.go or main.go.) 
        * manifest.json
        * LICENSE
 
-### Important Notes
-> [!IMPORTANT] 
-> goxisbuilder needs to be executed in a go project, so before run goxisbuilder initalize a new project with `go mod init myproject`
+### Start, Install, Watch
+To install and start the ACAP application after building it, add the `-install`  and `-start`  flags. Also, specify the `-ip <camera IP address>`  and `-pwd <camera root password>`  flags.
+
+If you are interested in viewing the syslog output of the ACAP application, add the `-watch`  flag. (Note: IP address and password are required.)
+
+### Additional ACAP/EAP Package files
+When deploying ACAPs, such as those with machine learning models, it's necessary to bundle model files into the .eap package.
+
+Simply use the `-files` argument to specify which files goxisbuilder should bundle.
 
 > [!IMPORTANT] 
-> The `-appdir` flag is required. It specifies the directory of the application you wish to build. This directory must contain a ***.go*** file with main function, a ***LICENSE*** file, and a ***manifest.json*** file.
+> These files need to be in the Application Directory.
+
+#### Example
+```
+goxisbuilder.exe -files=ssd_mobilenet_v2_coco_quant_postprocess.tflite
+```
+
+### Custom Dockerfile
+To use your own Dockerfile, add the `-dockerfile` flag and base it on the repository's *Dockerfile*.
+
+### Multiple Manifests
+In case of multiple manifest files for an application, you can use the `-manifest` flag to specify which manifest file to use for the build.
 
 ### Usage
-
 ```shell
-.\goxisbuilder.exe -appdir="mycoolacap"
+.\goxisbuilder.exe -h
 ```
 
 | Flag                | Description                                                                                                                      | Default           |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
 | `-h`                | Displays this help message.                                                                                                      |                   |
-| `-appdir`           | The full path to the application directory from which to build.                                                                  | required          |
+| `-appdir`           | The path to the application directory from which to build.                                                                       | `""`              |
 | `-arch`             | The architecture for the ACAP application: 'aarch64' or 'armv7hf'.                                                               | `"aarch64"`       |
-| `-dockerfile`       | Use your own dockerfile                                                                                                          | `""`       |
-| `-files`            | Files for adding to the acap eap package like larod models (filename1 filename2 ...)                                             | `""`       |
+| `-dockerfile`       | Use your own dockerfile                                                                                                          | `""`              |
+| `-files`            | Files for adding to the acap eap package like larod models (filename1 filename2 ...)                                             | `""`              |
 | `-install`          | Set to true to install the application on the camera.                                                                            | `false`           |
-| `-prune`            | Set to true execute 'docker system prune -f' after build.                                                                        | `false`           |
+| `-ip`               | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
 | `-lowsdk`           | Set to true to build with acap-sdk version 3.5 and ubunutu 20.04                                                                 | `false`           |
 | `-manifest`         | The path to the manifest file. Defaults to 'manifest.json'.                                                                      | `"manifest.json"` |
-| `-ip`               | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
+| `-prune`            | Set to true execute 'docker system prune -f' after build.                                                                        | `false`           |
 | `-pwd`              | The root password for the camera where the EAP application is installed.                                                         | `""`              |
 | `-start`            | Set to true to start the application after installation.                                                                         | `false`           |
 | `-watch`            | Set to true to monitor the package log after building.                                                                           | `false`           |
 
-### Customize Docker Build
-You can set your one docker file via `-dockerfile`,
-just use the repo Dockerfile as starting point.
-
-#### Example
-```
-goxisbuilder.exe -appdir="./mycoolacap" -dockerfile="CustomDockerfile"
-```
 
 
-### Additional ACAP/EAP Package files
-Deploying ACAP's for example with Machine Learning models,
-needs to bundle model files into the .eap package.
-
-Just use `-files` arg to tell goxisbuilder which files you want to bundle.
-
-> [!IMPORTANT] 
->This files need also be in **appdir**
-
-#### Example
-```
-goxisbuilder.exe -appdir="./examples/axlarod/object_detection" -files=ssd_mobilenet_v2_coco_quant_postprocess.tflite
-```

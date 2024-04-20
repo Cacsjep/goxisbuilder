@@ -136,7 +136,7 @@ Loop:
 }
 
 func listEapDirectory() {
-	entries, err := os.ReadDir("./eap")
+	entries, err := os.ReadDir("./build")
 	if err != nil {
 		log.Fatal(err)
 	}

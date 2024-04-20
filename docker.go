@@ -145,13 +145,13 @@ func createContainer(ctx context.Context, cli *client.Client, imageName string) 
 
 // copyFromContainer copy our build result
 func copyFromContainer(ctx context.Context, cli *client.Client, id string) error {
-	copyFromContainer, _, err := cli.CopyFromContainer(ctx, id, "/opt/eap")
+	copyFromContainer, _, err := cli.CopyFromContainer(ctx, id, "/opt/build")
 	if err != nil {
 		return err
 	}
 	defer copyFromContainer.Close()
 
-	os.Mkdir("eap", 0664)
+	os.Mkdir("build", 0664)
 
 	tr := tar.NewReader(copyFromContainer)
 	var foundFile bool
