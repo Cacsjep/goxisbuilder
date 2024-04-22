@@ -32,6 +32,10 @@ Directory/File Structure:
    * manifest.json
    * LICENSE
 
+
+> [!NOTE] 
+> After a successful build, a **build** directory with the corresponding .eap file is created.
+
 #### Outside a Applications Directory
 Build command: `goxisbuilder.exe -appdir=<application-director>` or on linux `goxisbuilder -appdir=<application-director>`
 
@@ -47,6 +51,9 @@ Directory/File Structure:
        * *.go (It does not matter whether you use app.go or main.go.) 
        * manifest.json
        * LICENSE
+
+> [!NOTE] 
+> After a successful build, a **build** directory with the corresponding .eap file is created.
 
 ### Start, Install, Watch
 To install and start the ACAP application after building it, add the `-install`  and `-start`  flags. Also, specify the `-ip <camera IP address>`  and `-pwd <camera root password>`  flags.
