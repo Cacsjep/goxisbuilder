@@ -26,7 +26,7 @@ func main() {
 	lowestSdkVersion := flag.Bool("lowsdk", false, "Set to true to build with acap-sdk version 3.5 and ubunutu 20.04")
 	watch := flag.Bool("watch", false, "Set to true to monitor the package log after building.")
 	appDirectory := flag.String("appdir", "", "The path to the application directory from which to build, or blank if the current directory is the application directory.")
-	filesToAdd := flag.String("files", "", "Add additional files to the container. (filename1 filename2 ...), files need to be in appdir")
+	filesToAdd := flag.String("files", "", "Add additional files to the container. (filename1 filename2 directory ...), files need to be in appdir")
 	flag.Parse()
 
 	if *showHelp {

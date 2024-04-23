@@ -90,7 +90,7 @@ In case of multiple manifest files for an application, you can use the `-manifes
 | `-appdir`           | The path to the application directory from which to build.                                                                       | `""`              |
 | `-arch`             | The architecture for the ACAP application: 'aarch64' or 'armv7hf'.                                                               | `"aarch64"`       |
 | `-dockerfile`       | Use your own dockerfile                                                                                                          | `""`              |
-| `-files`            | Files for adding to the acap eap package like larod models (filename1 filename2 ...)                                             | `""`              |
+| `-files`            | Files for adding to the acap eap package like larod models (filename1 filename2 directory)                                             | `""`              |
 | `-install`          | Set to true to install the application on the camera.                                                                            | `false`           |
 | `-ip`               | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
 | `-lowsdk`           | Set to true to build with acap-sdk version 3.5 and ubunutu 20.04                                                                 | `false`           |
