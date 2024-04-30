@@ -79,6 +79,9 @@ To use your own Dockerfile, add the `-dockerfile` flag and base it on the reposi
 ### Multiple Manifests
 In case of multiple manifest files for an application, you can use the `-manifest` flag to specify which manifest file to use for the build.
 
+### Ignore dirs or files
+Files or directories can be excluded from being copied into the container by prefixing their names with an underscore.
+
 ### Usage
 ```shell
 .\goxisbuilder.exe -h
