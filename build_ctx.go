@@ -36,6 +36,15 @@ func createBuildContext(baseDir string, dockerfile string) (io.Reader, error) {
 		if path == baseDir {
 			return nil
 		}
+
+		// Skip files or directories that start with an underscore
+		if strings.HasPrefix(filepath.Base(path), "_") {
+			if info.IsDir() {
+				return filepath.SkipDir // Skip entire directory if it starts with an underscore
+			}
+			return nil // Skip this file
+		}
+
 		// Ensure file paths use Unix-style separators
 		fixedPath := fixPathSeparator(path)
 
