@@ -102,7 +102,7 @@ Files or directories can be excluded from being copied into the container by pre
 | `-prune`            | Set to true execute 'docker system prune -f' after build.                                                                        | `false`           |
 | `-pwd`              | The root password for the camera where the EAP application is installed.                                                         | `""`              |
 | `-start`            | Set to true to start the application after installation.                                                                         | `false`           |
-| `-version`          | Set to specifiy the sdk version for the ACAP image like, for example -version 1.12                                               | ``           |
+| `-version`          | Set to specifiy the sdk version for the ACAP image like, for example -version 1.12                                               |            |
 | `-watch`            | Set to true to monitor the package log after building.                                                                           | `false`           |
 
 
