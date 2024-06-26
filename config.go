@@ -27,4 +27,5 @@ type BuildConfiguration struct {
 	Watch         bool
 	Dockerfile    string
 	FilesToAdd    string
+	SdkVersion    string
 }

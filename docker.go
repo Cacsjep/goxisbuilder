@@ -151,7 +151,10 @@ func copyFromContainer(ctx context.Context, cli *client.Client, id string) error
 	}
 	defer copyFromContainer.Close()
 
-	os.Mkdir("build", 0664)
+	err = os.Mkdir("build", os.FileMode(0755))
+	if err != nil {
+		return fmt.Errorf("failed to create build directory (local): %w", err)
+	}
 
 	tr := tar.NewReader(copyFromContainer)
 	var foundFile bool
@@ -167,19 +170,21 @@ func copyFromContainer(ctx context.Context, cli *client.Client, id string) error
 		if header.Typeflag == tar.TypeReg {
 			outputFile, err := os.Create(header.Name)
 			if err != nil {
-				continue
+				return fmt.Errorf("failed to create file that is extracted from docker context archiv, File:%s from docker folder /opt/build, Error: %w", header.Name, err)
 			}
 			defer outputFile.Close()
 
 			if _, err := io.Copy(outputFile, tr); err != nil {
-				continue
+				if err != nil {
+					return fmt.Errorf("failed to copy file that is extracted from docker context archiv, File:%s from docker folder /opt/build, Error: %w", header.Name, err)
+				}
 			}
 			foundFile = true
 		}
 	}
 
 	if !foundFile {
-		return errors.New("no file found in the archive")
+		return errors.New("there is no file in the docker context archive /opt/build, but at least .eap acap file should be there")
 	}
 
 	return nil

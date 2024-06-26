@@ -21,6 +21,7 @@ func main() {
 	arch := flag.String("arch", "aarch64", "The architecture for the ACAP application: 'aarch64' or 'armv7hf'.")
 	doStart := flag.Bool("start", false, "Set to true to start the application after installation.")
 	createProject := flag.Bool("newapp", false, "Generate a new goxis app.")
+	sdk_version := flag.String("sdk", "", "The version of the SDK to use.")
 	doInstall := flag.Bool("install", false, "Set to true to install the application on the camera.")
 	prune := flag.Bool("prune", false, "Set to true execute 'docker system prune -f' after build.")
 	lowestSdkVersion := flag.Bool("lowsdk", false, "Set to true to build with acap-sdk version 3.5 and ubunutu 20.04")
@@ -89,6 +90,7 @@ func main() {
 		FilesToAdd:   *filesToAdd,
 		Prune:        *prune,
 		ImageName:    fmt.Sprintf("%s:%s", *arch, amf.ACAPPackageConf.Setup.AppName),
+		SdkVersion:   *sdk_version,
 	}
 	// Configure SDK and architecture for the specific app
 	configureSdk(*lowestSdkVersion, &buildConfig)

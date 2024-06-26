@@ -106,12 +106,23 @@ func configureSdk(lowestSdkVersion bool, buildConfig *BuildConfiguration) {
 	if lowestSdkVersion {
 		buildConfig.Sdk = "acap-sdk"
 		buildConfig.UbunutVersion = "20.04"
-		buildConfig.Version = "3.5"
+		if buildConfig.SdkVersion != "" {
+			buildConfig.Version = buildConfig.SdkVersion
+		} else {
+			buildConfig.Version = "3.5"
+		}
 	} else {
 		buildConfig.Sdk = "acap-native-sdk"
 		buildConfig.UbunutVersion = "22.04"
-		buildConfig.Version = "1.13"
+		if buildConfig.SdkVersion != "" {
+			buildConfig.Version = buildConfig.SdkVersion
+		} else {
+			buildConfig.Version = "1.14"
+		}
 	}
+	fmt.Println("Using SDK:", buildConfig.Sdk)
+	fmt.Println("Using SDK version:", buildConfig.Version)
+	fmt.Println("Using Ubuntu version:", buildConfig.UbunutVersion)
 }
 
 func watchPackageLog(buildConfig *BuildConfiguration) {
