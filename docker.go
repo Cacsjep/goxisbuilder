@@ -151,9 +151,15 @@ func copyFromContainer(ctx context.Context, cli *client.Client, id string) error
 	}
 	defer copyFromContainer.Close()
 
-	err = os.Mkdir("build", os.FileMode(0755))
-	if err != nil {
-		return fmt.Errorf("failed to create build directory (local): %w", err)
+	if _, err := os.Stat("build"); err != nil {
+		if os.IsNotExist(err) {
+			err = os.Mkdir("build", os.FileMode(0755))
+			if err != nil {
+				return fmt.Errorf("failed to create build directory (local): %w", err)
+			}
+		} else {
+			return fmt.Errorf("failed to check build directory (local): %w", err)
+		}
 	}
 
 	tr := tar.NewReader(copyFromContainer)
