@@ -20,6 +20,8 @@ ARG START=
 ARG INSTALL=
 ARG FILES_TO_ADD_TO_ACAP=
 ARG GO_APP=test
+ARG EXTRA_LIBS_SCRIPT=
+
 
 ENV GOPATH="/go" \
     PATH="${GOPATH}/bin:/usr/local/go/bin:${PATH}" \
@@ -30,7 +32,8 @@ ENV GOPATH="/go" \
     APP_NAME=${APP_NAME} \
     ACAP_FILES=${FILES_TO_ADD_TO_ACAP} \
     MANIFEST=${APP_MANIFEST} \
-    GO_APP=${GO_APP}
+    GO_APP=${GO_APP} \
+    EXTRA_LIBS_SCRIPT=${EXTRA_LIBS_SCRIPT}
 
 RUN mkdir ${APP_DIR}
 
@@ -44,16 +47,27 @@ RUN mkdir -p "${GOPATH}/src" "${GOPATH}/bin" "${GOPATH}/pkg" \
     && chmod -R 777 "${GOPATH}"
 
 #-------------------------------------------------------------------------------
-# ACAP Build
+# ACAP Build section
 #-------------------------------------------------------------------------------
 COPY . ${APP_DIR}
 WORKDIR ${APP_DIR}
 RUN python generate_makefile.py ${APP_NAME} ${GO_APP} ${APP_MANIFEST}
 WORKDIR ${APP_DIR}/${GO_APP}
+
+
+# Extra libs
+#-------------------------------------------------------------------------------
 RUN . /opt/axis/acapsdk/environment-setup* && \
-    acap-build . ${ACAP_FILES} && \
-    if [ "${INSTALL}" = "YES" ]; then eap-install.sh ${IP_ADDR} ${PASSWORD} install; fi && \
-    if [ "${START}" = "YES" ]; then eap-install.sh start; fi
+    if [ -n "${EXTRA_LIBS_SCRIPT}" ]; then \
+    bash "./$(basename ${EXTRA_LIBS_SCRIPT})"; \
+    fi
+
+# Acap build
+#-------------------------------------------------------------------------------
+RUN . /opt/axis/acapsdk/environment-setup* && \
+acap-build . ${ACAP_FILES} && \
+if [ "${INSTALL}" = "YES" ]; then eap-install.sh ${IP_ADDR} ${PASSWORD} install; fi && \
+if [ "${START}" = "YES" ]; then eap-install.sh start; fi
 
 #-------------------------------------------------------------------------------
 # Create output directory, we copy files from eap to host

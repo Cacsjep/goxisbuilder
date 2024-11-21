@@ -7,25 +7,26 @@ import "github.com/Cacsjep/goxis/pkg/axmanifest"
 // and flags indicating whether to install the application, start it,
 // build examples, or watch logs.
 type BuildConfiguration struct {
-	Manifest      *axmanifest.ApplicationManifestSchema
-	ManifestPath  string
-	ImageName     string
-	Ip            string
-	Pwd           string
-	Arch          string
-	DoStart       bool
-	DoInstall     bool
-	Prune         bool
-	AppDirectory  string
-	Sdk           string
-	UbunutVersion string
-	Version       string
-	GoArch        string
-	GoArm         string
-	CrossPrefix   string
-	LowestSdk     bool
-	Watch         bool
-	Dockerfile    string
-	FilesToAdd    string
-	SdkVersion    string
+	Manifest        *axmanifest.ApplicationManifestSchema
+	ManifestPath    string
+	ImageName       string
+	Ip              string
+	Pwd             string
+	Arch            string
+	DoStart         bool
+	DoInstall       bool
+	Prune           bool
+	AppDirectory    string
+	Sdk             string
+	UbunutVersion   string
+	Version         string
+	GoArch          string
+	GoArm           string
+	CrossPrefix     string
+	LowestSdk       bool
+	Watch           bool
+	Dockerfile      string
+	FilesToAdd      string
+	SdkVersion      string
+	ExtraLibsScript string
 }

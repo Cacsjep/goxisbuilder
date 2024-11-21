@@ -97,6 +97,7 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 			"INSTALL":              ptr(boolToStr(bc.DoInstall)),
 			"GO_APP":               ptr(bc.AppDirectory),
 			"FILES_TO_ADD_TO_ACAP": ptr(files_to_add),
+			"EXTRA_LIBS_SCRIPT":    ptr(bc.ExtraLibsScript),
 		},
 		Remove:      true,
 		ForceRemove: true,
