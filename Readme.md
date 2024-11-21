@@ -65,6 +65,19 @@ When deploying ACAPs, such as those with machine learning models, it's necessary
 
 Simply use the `-files` argument to specify which files goxisbuilder should bundle.
 
+### Including Extra Libraries for Third-Party Dependencies
+When deploying ACAPs, you might need to include extra dynamically linked libraries, especially when integrating third-party tools like Tesseract or other external dependencies.
+
+To include these libraries, use the `-extra-libs-script` option with goxisbuilder.exe. The script you specify will be invoked before the Go ACAP is built. This allows you to compile or copy the necessary .so (shared object) files into the ACAP's lib folder, ensuring that all required dependencies are included in your application package.
+
+> [!IMPORTANT] 
+> The script you use with `-extra-libs-script` must be located in the project folder.
+
+#### Example
+```
+.\goxisbuilder.exe -extra-libs-script tesseract_build.sh
+```
+
 > [!IMPORTANT] 
 > These files need to be in the Application Directory.
 
