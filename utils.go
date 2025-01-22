@@ -113,11 +113,13 @@ func configureSdk(lowestSdkVersion bool, buildConfig *BuildConfiguration) {
 		}
 	} else {
 		buildConfig.Sdk = "acap-native-sdk"
-		buildConfig.UbunutVersion = "22.04"
+		if buildConfig.UbunutVersion == "" {
+			buildConfig.UbunutVersion = "24.04"
+		}
 		if buildConfig.SdkVersion != "" {
 			buildConfig.Version = buildConfig.SdkVersion
 		} else {
-			buildConfig.Version = "1.14"
+			buildConfig.Version = "12.2.0"
 		}
 	}
 	fmt.Println("Using SDK:", buildConfig.Sdk)
