@@ -187,6 +187,8 @@ func printCompatibility(buildConfig *BuildConfiguration) {
 		"1.11": "11.7 and later until LTS",
 		"1.12": "11.8 and later until LTS",
 		"1.13": "11.9 and later until LTS",
+		"1.14": "11.10 and later until LTS",
+		"1.15": "11.11 (LTS)",
 	}
 
 	// Check if it's using the native SDK or standard SDK
