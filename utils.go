@@ -47,13 +47,23 @@ func getLog(url string, pwd string) {
 
 	resp, err := client.Get(url)
 	if err != nil {
-		log.Println(err)
+		log.Printf("FETCH LOG ERROR: %s", err)
+		return
+	}
+
+	if resp.StatusCode == 401 {
+		log.Println("FETCH LOG ERROR: Unauthorized, either the password is incorrect or the camera does not support digest auth -> check root.Network.HTTP.AuthenticationPolicy via https://<ip>/axis-cgi/param.cgi?action=list, should be set to digest")
+		return
+	}
+
+	if resp.StatusCode != 200 {
+		log.Printf("FETCH LOG ERROR: %s", resp.Status)
 		return
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Println(err)
+		log.Printf("FETCH LOG ERROR: %s", err)
 		return
 	}
 
