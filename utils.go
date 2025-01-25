@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"io"
 	"log"
@@ -13,7 +14,7 @@ import (
 	"syscall"
 	"time"
 
-	dac "github.com/Snawoot/go-http-digest-auth-client"
+	"github.com/icholy/digest"
 )
 
 const (
@@ -35,7 +36,13 @@ func ptr(s string) *string {
 
 func getLog(url string, pwd string) {
 	client := &http.Client{
-		Transport: dac.NewDigestTransport("root", pwd, http.DefaultTransport),
+		Transport: &digest.Transport{
+			Username: "root",
+			Password: pwd,
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			},
+		},
 	}
 
 	resp, err := client.Get(url)
@@ -135,7 +142,7 @@ func watchPackageLog(buildConfig *BuildConfiguration) {
 	ticker := time.NewTicker(3 * time.Second)
 	defer ticker.Stop()
 
-	url := fmt.Sprintf("http://%s/axis-cgi/admin/systemlog.cgi?appname=%s", buildConfig.Ip, buildConfig.Manifest.ACAPPackageConf.Setup.AppName)
+	url := fmt.Sprintf("https://%s/axis-cgi/admin/systemlog.cgi?appname=%s", buildConfig.Ip, buildConfig.Manifest.ACAPPackageConf.Setup.AppName)
 Loop:
 	for {
 		select {
