@@ -50,10 +50,13 @@ COPY . ${APP_DIR}
 WORKDIR ${APP_DIR}
 RUN python generate_makefile.py ${APP_NAME} ${GO_APP} ${APP_MANIFEST}
 WORKDIR ${APP_DIR}/${GO_APP}
-RUN . /opt/axis/acapsdk/environment-setup* && \
-    acap-build . ${ACAP_FILES} && \
-    if [ "${INSTALL}" = "YES" ]; then eap-install.sh ${IP_ADDR} ${PASSWORD} install; fi && \
-    if [ "${START}" = "YES" ]; then eap-install.sh start; fi
+RUN . /opt/axis/acapsdk/environment-setup* && acap-build . ${ACAP_FILES} || (echo "acap-build error" && exit 1)
+
+# Install ACAP only if INSTALL=YES
+RUN . /opt/axis/acapsdk/environment-setup* && if [ "$INSTALL" = "YES" ]; then eap-install.sh ${IP_ADDR} ${PASSWORD} install || (echo "acap-build error install" && exit 1); fi
+
+# Start ACAP only if START=YES
+RUN . /opt/axis/acapsdk/environment-setup* && if [ "$START" = "YES" ]; then eap-install.sh start || (echo "acap-build error start" && exit 1); fi
 
 #-------------------------------------------------------------------------------
 # Create output directory, we copy files from eap to host

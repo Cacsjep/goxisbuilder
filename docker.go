@@ -105,7 +105,7 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 
 	buildResponse, err := cli.ImageBuild(ctx, buildContext, options)
 	if err != nil {
-		return fmt.Errorf("failed to build image: %w", err)
+		return fmt.Errorf("unable to build image: %w", err)
 	}
 	defer buildResponse.Body.Close()
 	decoder := json.NewDecoder(buildResponse.Body)
@@ -115,15 +115,18 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 		if err := decoder.Decode(&m); err == io.EOF {
 			break
 		} else if err != nil {
-			return fmt.Errorf("failed to decode build response: %s", err.Error())
+			return fmt.Errorf("unable to decode build response: %s", err.Error())
 		}
 
 		s, ok := m["stream"]
 		if ok {
+			// exit when we see the acap-build error message but when it is not a step, eg command line in dockerfile
+			if strings.Contains(s.(string), "acap-build error") && !strings.Contains(s.(string), "Step") {
+				return errors.New(s.(string))
+			}
 			fmt.Print(s)
 		}
 	}
-
 	return nil
 }
 

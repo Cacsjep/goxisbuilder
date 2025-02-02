@@ -146,7 +146,7 @@ func configureSdk(lowestSdkVersion bool, buildConfig *BuildConfiguration) {
 
 func watchPackageLog(buildConfig *BuildConfiguration) {
 	// Setup a channel to listen for interrupt signal (Ctrl+C)
-	sigChan := make(chan os.Signal, 1)
+	sigChan := make(chan os.Signal, 2)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 
 	ticker := time.NewTicker(3 * time.Second)
@@ -190,22 +190,25 @@ func printCompatibility(buildConfig *BuildConfiguration) {
 
 	// Maps for Native SDK version to Firmware compatibility
 	nativeSdkToFirmware := map[string]string{
-		"1.0":  "10.7 and later until LTS",
-		"1.1":  "10.9 and later until LTS",
-		"1.2":  "10.10 and later until LTS",
-		"1.3":  "10.12 (LTS)",
-		"1.4":  "11.0 and later until LTS",
-		"1.5":  "11.1 and later until LTS",
-		"1.6":  "11.2 and later until LTS",
-		"1.7":  "11.3 and later until LTS",
-		"1.8":  "11.4 and later until LTS",
-		"1.9":  "11.5 and later until LTS",
-		"1.10": "11.6 and later until LTS",
-		"1.11": "11.7 and later until LTS",
-		"1.12": "11.8 and later until LTS",
-		"1.13": "11.9 and later until LTS",
-		"1.14": "11.10 and later until LTS",
-		"1.15": "11.11 (LTS)",
+		"1.0":    "10.7 and later until LTS",
+		"1.1":    "10.9 and later until LTS",
+		"1.2":    "10.10 and later until LTS",
+		"1.3":    "10.12 (LTS)",
+		"1.4":    "11.0 and later until LTS",
+		"1.5":    "11.1 and later until LTS",
+		"1.6":    "11.2 and later until LTS",
+		"1.7":    "11.3 and later until LTS",
+		"1.8":    "11.4 and later until LTS",
+		"1.9":    "11.5 and later until LTS",
+		"1.10":   "11.6 and later until LTS",
+		"1.11":   "11.7 and later until LTS",
+		"1.12":   "11.8 and later until LTS",
+		"1.13":   "11.9 and later until LTS",
+		"1.14":   "11.10 and later until LTS",
+		"1.15":   "11.11 (LTS)",
+		"12.0.0": "12.0 and later until LTS",
+		"12.1.0": "12.1 and later until LTS",
+		"12.2.0": "12.2 and later until LTS",
 	}
 
 	// Check if it's using the native SDK or standard SDK
@@ -234,6 +237,10 @@ func printCompatibility(buildConfig *BuildConfiguration) {
 		"1.4.0": "11.7",
 		"1.5.0": "11.8",
 		"1.6.0": "11.9",
+		"1.7.0": "11.10",
+		"1.7.1": "12.0",
+		"1.7.2": "12.1",
+		"1.7.3": "12.2",
 	}
 
 	if firmware, ok := schemaToFirmware[buildConfig.Manifest.SchemaVersion]; ok {

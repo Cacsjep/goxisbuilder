@@ -8,6 +8,9 @@ Its main purpose is to build apps with [goxis](https://github.com/Cacsjep/goxis)
 go install github.com/Cacsjep/goxisbuilder@latest
 ```
 
+> [!NOTE] 
+> MAC OS: If you not already have **go bin directory** in your path you need to perform `export PATH=$PATH:$HOME/go/bin`
+
 ### Quick Start (New Project)
 Creating a new project is very handy, it creates an application directory with all the necessary stuff inside. :)
 ```shell
