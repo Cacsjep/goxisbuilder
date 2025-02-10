@@ -17,7 +17,7 @@ ARG GO_ARM=
 ARG IP_ADDR= 
 ARG PASSWORD= 
 ARG START=
-ARG COPY=
+ARG DONT_COPY=
 ARG INSTALL=
 ARG FILES_TO_ADD_TO_ACAP=
 ARG GO_APP=test
@@ -67,7 +67,7 @@ RUN . /opt/axis/acapsdk/environment-setup* && if [ "$START" = "YES" ]; then eap-
 #----------------------------------------------------------------------------
 # Conditional Copy out the eap file
 #----------------------------------------------------------------------------
-RUN if [ "$COPY" = "YES" ]; then \
+RUN if [ "$DONT_COPY" = "NO" ]; then \
   mkdir /opt/build && \
   mv *.eap /opt/build && \
   cd /opt/build && \

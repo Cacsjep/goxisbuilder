@@ -42,6 +42,8 @@ func buildAndRunContainer(ctx context.Context, cli *client.Client, bc *BuildConf
 		if err := copyFromContainer(ctx, cli, containerID); err != nil {
 			return fmt.Errorf("copy eap failed: %w", err)
 		}
+	} else {
+		fmt.Println("Copy eap file skipped")
 	}
 
 	if err := cli.ContainerStop(ctx, containerID, container.StopOptions{}); err != nil {
@@ -97,7 +99,7 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 			"PASSWORD":             ptr(bc.Pwd),
 			"START":                ptr(boolToStr(bc.DoStart)),
 			"INSTALL":              ptr(boolToStr(bc.DoInstall)),
-			"COPY":                 ptr(boolToStr(bc.NotCopy)),
+			"DONT_COPY":            ptr(boolToStr(bc.NotCopy)),
 			"GO_APP":               ptr(bc.AppDirectory),
 			"FILES_TO_ADD_TO_ACAP": ptr(files_to_add),
 		},

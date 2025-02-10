@@ -24,7 +24,7 @@ func main() {
 	sdk_version := flag.String("sdk", "", "The version of the SDK to use. (blank = 12.2.0)")
 	ubunutu_version := flag.String("ubunutu", "", "The Ubunut version to use. (blank = 24.04)")
 	doInstall := flag.Bool("install", false, "Set to true to install the application on the camera.")
-	notCopy := flag.Bool("nocopy", true, "Set to true to dont copy the eap file.")
+	notCopy := flag.Bool("nocopy", false, "Set to true if you dont want to copy the eap file to host machine.")
 	prune := flag.Bool("prune", false, "Set to true execute 'docker system prune -f' after build.")
 	lowestSdkVersion := flag.Bool("lowsdk", false, "Set to true to build with acap-sdk version 3.5 and ubunutu 20.04")
 	watch := flag.Bool("watch", false, "Set to true to monitor the package log after building.")

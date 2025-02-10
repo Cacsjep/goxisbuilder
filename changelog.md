@@ -14,3 +14,6 @@ TAG v1.2.2:
 TAG v1.2.3:
     I: Chache go deps
     F: Optinal copy
+
+TAG v1.2.4:
+    B: fix copy flag
