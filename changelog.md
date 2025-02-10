@@ -11,6 +11,6 @@ TAG v1.2.2:
     I: Add new manifest and sdk versions
     D: Add MACOS path info in readme.
 
-TAG v1.2.:
+TAG v1.2.3:
     I: Chache go deps
     F: Optinal copy
