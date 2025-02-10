@@ -98,7 +98,7 @@ Files or directories can be excluded from being copied into the container by pre
 | `-dockerfile`       | Use your own dockerfile                                                                                                          | `""`              |
 | `-files`            | Files for adding to the acap eap package like larod models (filename1 filename2 directory)                                             | `""`              |
 | `-install`          | Set to true to install the application on the camera.                                                                            | `false`           |
-| `-copy`             | Set to false when you dont need the eap file after build.                                                                        | `true`           |
+| `-nocopy`             | Set to true when you dont need the eap file after build.                                                                        | `false`           |
 | `-ip`               | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
 | `-lowsdk`           | Set to true to build with acap-sdk version 3.5 and ubunutu 20.04                                                                 | `false`           |
 | `-manifest`         | The path to the manifest file. Defaults to 'manifest.json'.                                                                      | `"manifest.json"` |

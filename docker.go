@@ -38,7 +38,7 @@ func buildAndRunContainer(ctx context.Context, cli *client.Client, bc *BuildConf
 		return fmt.Errorf("create container failed: %w", err)
 	}
 
-	if bc.DoCopy {
+	if !bc.NotCopy {
 		if err := copyFromContainer(ctx, cli, containerID); err != nil {
 			return fmt.Errorf("copy eap failed: %w", err)
 		}
@@ -97,7 +97,7 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 			"PASSWORD":             ptr(bc.Pwd),
 			"START":                ptr(boolToStr(bc.DoStart)),
 			"INSTALL":              ptr(boolToStr(bc.DoInstall)),
-			"COPY":                 ptr(boolToStr(bc.DoCopy)),
+			"NOCOPY":               ptr(boolToStr(bc.NotCopy)),
 			"GO_APP":               ptr(bc.AppDirectory),
 			"FILES_TO_ADD_TO_ACAP": ptr(files_to_add),
 		},
