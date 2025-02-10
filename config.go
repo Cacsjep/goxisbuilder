@@ -15,6 +15,7 @@ type BuildConfiguration struct {
 	Arch          string
 	DoStart       bool
 	DoInstall     bool
+	DoCopy        bool
 	Prune         bool
 	AppDirectory  string
 	Sdk           string

@@ -17,6 +17,7 @@ ARG GO_ARM=
 ARG IP_ADDR= 
 ARG PASSWORD= 
 ARG START=
+ARG COPY=
 ARG INSTALL=
 ARG FILES_TO_ADD_TO_ACAP=
 ARG GO_APP=test
@@ -46,6 +47,11 @@ RUN mkdir -p "${GOPATH}/src" "${GOPATH}/bin" "${GOPATH}/pkg" \
 #-------------------------------------------------------------------------------
 # ACAP Build
 #-------------------------------------------------------------------------------
+
+# Copy go.mod and go.sum files to cache dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+
 COPY . ${APP_DIR}
 WORKDIR ${APP_DIR}
 RUN python generate_makefile.py ${APP_NAME} ${GO_APP} ${APP_MANIFEST}
@@ -58,13 +64,14 @@ RUN . /opt/axis/acapsdk/environment-setup* && if [ "$INSTALL" = "YES" ]; then ea
 # Start ACAP only if START=YES
 RUN . /opt/axis/acapsdk/environment-setup* && if [ "$START" = "YES" ]; then eap-install.sh start || (echo "acap-build error start" && exit 1); fi
 
-#-------------------------------------------------------------------------------
-# Create output directory, we copy files from eap to host
-#-------------------------------------------------------------------------------
-RUN mkdir /opt/build
-RUN mv *.eap /opt/build
-RUN cd /opt/build && \
-    for file in *.eap; do \
+#----------------------------------------------------------------------------
+# Conditional Copy out the eap file
+#----------------------------------------------------------------------------
+RUN if [ "$COPY" = "YES" ]; then \
+  mkdir /opt/build && \
+  mv *.eap /opt/build && \
+  cd /opt/build && \
+  for file in *.eap; do \
         mv "$file" "${file%.eap}_sdk_${VERSION}.eap"; \
-    done
-
+  done; \
+fi
