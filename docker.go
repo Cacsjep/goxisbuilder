@@ -97,7 +97,7 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 			"PASSWORD":             ptr(bc.Pwd),
 			"START":                ptr(boolToStr(bc.DoStart)),
 			"INSTALL":              ptr(boolToStr(bc.DoInstall)),
-			"NOCOPY":               ptr(boolToStr(bc.NotCopy)),
+			"COPY":                 ptr(boolToStr(bc.NotCopy)),
 			"GO_APP":               ptr(bc.AppDirectory),
 			"FILES_TO_ADD_TO_ACAP": ptr(files_to_add),
 		},

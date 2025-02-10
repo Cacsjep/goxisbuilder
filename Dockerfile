@@ -67,7 +67,7 @@ RUN . /opt/axis/acapsdk/environment-setup* && if [ "$START" = "YES" ]; then eap-
 #----------------------------------------------------------------------------
 # Conditional Copy out the eap file
 #----------------------------------------------------------------------------
-RUN if [ "$NOCOPY" = "NO" ]; then \
+RUN if [ "$COPY" = "YES" ]; then \
   mkdir /opt/build && \
   mv *.eap /opt/build && \
   cd /opt/build && \
