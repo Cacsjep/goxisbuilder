@@ -19,7 +19,7 @@ import (
 var embeddedFiles embed.FS
 
 // createBuildContext generates the build context including the current directory and the embedded Dockerfile.
-func createBuildContext(baseDir string, dockerfile string) (io.Reader, error) {
+func createBuildContext(baseDir string, dockerfile string, ingoreDirectors []string) (io.Reader, error) {
 	buf := new(bytes.Buffer)
 	tw := tar.NewWriter(buf)
 
@@ -45,6 +45,16 @@ func createBuildContext(baseDir string, dockerfile string) (io.Reader, error) {
 			return nil // Skip this file
 		}
 
+		// Skip directories that are in the ignore list
+		for _, ignoreDir := range ingoreDirectors {
+			if strings.HasPrefix(path, filepath.Join(baseDir, ignoreDir)) {
+				if info.IsDir() {
+					return filepath.SkipDir // Skip entire directory if it matches an ignore directory
+				}
+				return nil // Skip this file
+			}
+		}
+
 		// Ensure file paths use Unix-style separators
 		fixedPath := fixPathSeparator(path)
 
@@ -65,6 +75,7 @@ func createBuildContext(baseDir string, dockerfile string) (io.Reader, error) {
 		}
 		if !info.IsDir() {
 			// Write file content
+			fmt.Println("Adding file to tar:", fixedPath)
 			file, err := os.Open(path)
 			if err != nil {
 				return err

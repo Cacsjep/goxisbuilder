@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/Cacsjep/goxis/pkg/axmanifest"
 )
@@ -30,6 +31,7 @@ func main() {
 	watch := flag.Bool("watch", false, "Set to true to monitor the package log after building.")
 	appDirectory := flag.String("appdir", "", "The path to the application directory from which to build, or blank if the current directory is the application directory.")
 	filesToAdd := flag.String("files", "", "Add additional files to the container. (filename1 filename2 directory ...), files need to be in appdir")
+	ignoreDirs := flag.String("ignore", "", "Ignore directories in the appdir. (directory1 directory2 ...), directories need to be in appdir")
 	flag.Parse()
 
 	if *showHelp {
@@ -95,6 +97,7 @@ func main() {
 		ImageName:     fmt.Sprintf("%s:%s", *arch, amf.ACAPPackageConf.Setup.AppName),
 		SdkVersion:    *sdk_version,
 		UbunutVersion: *ubunutu_version,
+		IgnoreDirs:    strings.Split(*ignoreDirs, " "),
 	}
 	// Configure SDK and architecture for the specific app
 	configureSdk(*lowestSdkVersion, &buildConfig)

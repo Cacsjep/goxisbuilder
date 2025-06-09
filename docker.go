@@ -70,10 +70,13 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 		return fmt.Errorf("failed to create current dir: %w", err)
 	}
 
-	buildContext, err := createBuildContext(currentDir, bc.Dockerfile)
+	fmt.Println("Building Docker image...")
+	buildContext, err := createBuildContext(currentDir, bc.Dockerfile, bc.IgnoreDirs)
 	if err != nil {
 		return fmt.Errorf("failed to create build context: %w", err)
 	}
+
+	fmt.Println("Adding files to build context...")
 
 	files_to_add := ""
 	if bc.FilesToAdd != "" {
@@ -107,6 +110,8 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 		ForceRemove: true,
 		NoCache:     false,
 	}
+
+	fmt.Println("Starting Docker image build...")
 
 	buildResponse, err := cli.ImageBuild(ctx, buildContext, options)
 	if err != nil {

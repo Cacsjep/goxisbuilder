@@ -29,4 +29,5 @@ type BuildConfiguration struct {
 	Dockerfile    string
 	FilesToAdd    string
 	SdkVersion    string
+	IgnoreDirs    []string
 }
