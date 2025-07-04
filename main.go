@@ -97,7 +97,7 @@ func main() {
 		ImageName:     fmt.Sprintf("%s:%s", *arch, amf.ACAPPackageConf.Setup.AppName),
 		SdkVersion:    *sdk_version,
 		UbunutVersion: *ubunutu_version,
-		IgnoreDirs:    strings.Split(*ignoreDirs, " "),
+		IgnoreDirs:    strings.Fields(*ignoreDirs),
 	}
 	// Configure SDK and architecture for the specific app
 	configureSdk(*lowestSdkVersion, &buildConfig)

@@ -32,14 +32,17 @@ func createBuildContext(baseDir string, dockerfile string, ingoreDirectors []str
 		if err != nil {
 			return err
 		}
+
 		// Skip the root directory entry
 		if path == baseDir {
+			fmt.Println("Skipping base directory:", baseDir)
 			return nil
 		}
 
 		// Skip files or directories that start with an underscore
 		if strings.HasPrefix(filepath.Base(path), "_") {
 			if info.IsDir() {
+				fmt.Println("Skipping directory starting with underscore:", path)
 				return filepath.SkipDir // Skip entire directory if it starts with an underscore
 			}
 			return nil // Skip this file
@@ -47,10 +50,14 @@ func createBuildContext(baseDir string, dockerfile string, ingoreDirectors []str
 
 		// Skip directories that are in the ignore list
 		for _, ignoreDir := range ingoreDirectors {
+			fmt.Println("Checking against ignore directory:", ignoreDir)
 			if strings.HasPrefix(path, filepath.Join(baseDir, ignoreDir)) {
+				fmt.Println("Ignoring path:", path)
 				if info.IsDir() {
+					fmt.Println("Skipping ignored directory:", path)
 					return filepath.SkipDir // Skip entire directory if it matches an ignore directory
 				}
+				fmt.Println("Skipping ignored file:", path)
 				return nil // Skip this file
 			}
 		}
