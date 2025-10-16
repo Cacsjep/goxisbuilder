@@ -50,7 +50,6 @@ func createBuildContext(baseDir string, dockerfile string, ingoreDirectors []str
 
 		// Skip directories that are in the ignore list
 		for _, ignoreDir := range ingoreDirectors {
-			fmt.Println("Checking against ignore directory:", ignoreDir)
 			if strings.HasPrefix(path, filepath.Join(baseDir, ignoreDir)) {
 				fmt.Println("Ignoring path:", path)
 				if info.IsDir() {
