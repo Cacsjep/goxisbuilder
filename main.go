@@ -31,8 +31,9 @@ func main() {
 	watch := flag.Bool("watch", false, "Set to true to monitor the package log after building.")
 	appDirectory := flag.String("appdir", "", "The path to the application directory from which to build, or blank if the current directory is the application directory.")
 	filesToAdd := flag.String("files", "", "Add additional files to the container. (filename1 filename2 directory ...), files need to be in appdir")
-	ignoreDirs := flag.String("ignore", "", "Ignore directories in the appdir. (directory1 directory2 ...), directories need to be in appdir")
-	flag.Parse()
+    ignoreDirs := flag.String("ignore", "", "Ignore directories in the appdir. (directory1 directory2 ...), directories need to be in appdir")
+    tags := flag.String("tags", "", "Go build tags to pass to 'go build -tags'. Accepts space- or comma-separated values; normalized to comma-separated.")
+    flag.Parse()
 
 	if *showHelp {
 		flag.Usage()
@@ -79,7 +80,10 @@ func main() {
 		handleError(fmt.Sprintf("Failed to load manifest from %s", manifestPathFull), err)
 	}
 
-	buildConfig := BuildConfiguration{
+    // Normalize tags to the modern, comma-separated form used by Go
+    normalizedTags := normalizeGoBuildTags(*tags)
+
+    buildConfig := BuildConfiguration{
 		AppDirectory:  *appDirectory,
 		Arch:          *arch,
 		Manifest:      amf,
@@ -97,8 +101,9 @@ func main() {
 		ImageName:     fmt.Sprintf("%s:%s", *arch, amf.ACAPPackageConf.Setup.AppName),
 		SdkVersion:    *sdk_version,
 		UbunutVersion: *ubunutu_version,
-		IgnoreDirs:    strings.Fields(*ignoreDirs),
-	}
+        IgnoreDirs:    strings.Fields(*ignoreDirs),
+        BuildTags:     normalizedTags,
+    }
 	// Configure SDK and architecture for the specific app
 	configureSdk(*lowestSdkVersion, &buildConfig)
 	configureArchitecture(*arch, &buildConfig)

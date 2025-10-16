@@ -108,6 +108,14 @@ Files or directories can be excluded from being copied into the container by pre
 | `-start`            | Set to true to start the application after installation.                                                                         | `false`           |
 | `-sdk`              | Set to specifiy the sdk version for the ACAP image like, for example -version 1.12                                               | `12.2.0`           |
 | `-watch`            | Set to true to monitor the package log after building.                                                                           | `false`           |
+| `-tags`             | Go build tags passed through Docker to Makefile and applied to `go build -tags`. Accepts space- or comma-separated values; normalized to comma-separated.           | `""`              |
+
+#### Build tags examples
+- Single tag: `.\goxisbuilder.exe -tags=prod`
+- Multiple tags (space): `.\goxisbuilder.exe -tags="prod netcgo"`
+- Multiple tags (comma): `.\goxisbuilder.exe -tags=prod,netcgo`
+
+These are forwarded to Docker as `GO_BUILD_TAGS` and used by the generated Makefile. Tags are normalized to a comma-separated list internally.
 
 
 

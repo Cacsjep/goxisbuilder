@@ -105,6 +105,7 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 			"DONT_COPY":            ptr(boolToStr(bc.NotCopy)),
 			"GO_APP":               ptr(bc.AppDirectory),
 			"FILES_TO_ADD_TO_ACAP": ptr(files_to_add),
+			"GO_BUILD_TAGS":        ptr(bc.BuildTags),
 		},
 		Remove:      true,
 		ForceRemove: true,

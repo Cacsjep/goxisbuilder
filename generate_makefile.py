@@ -22,9 +22,16 @@ def create_makefile(app_name, appdir, manifest_file_name):
     # Create the Makefile content
     makefile_content = f"""
 .PHONY: build
+
+# Allow passing tags via environment variable GO_BUILD_TAGS
+TAGS_ARG := $(if $(strip $(GO_BUILD_TAGS)),-tags \"$(GO_BUILD_TAGS)\",)
+
 build:
-\tgo build -ldflags "-s -w  -extldflags '-L./lib -Wl,-rpath,./lib'" -o {app_name} .
+\tgo build $(TAGS_ARG) -ldflags \"-s -w  -extldflags '-L./lib -Wl,-rpath,./lib'\" -o {app_name} .
 """
+    
+    print("Creating Makefile with content:")
+    print(makefile_content)
 
     # Write the Makefile
     with open(make_file_path, "w") as makefile:

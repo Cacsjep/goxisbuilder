@@ -264,3 +264,33 @@ func printCompatibility(buildConfig *BuildConfiguration) {
 		fmt.Println("     Unsupported architecture.")
 	}
 }
+
+// normalizeGoBuildTags converts a user-provided tags string into a
+// comma-separated list per modern Go expectations. It accepts input in
+// either space- or comma-separated form, trims whitespace, removes empty
+// entries, and de-duplicates while preserving order.
+func normalizeGoBuildTags(s string) string {
+    s = strings.TrimSpace(s)
+    if s == "" {
+        return ""
+    }
+    // Treat commas as separators, then split on any whitespace
+    s = strings.ReplaceAll(s, ",", " ")
+    parts := strings.Fields(s)
+    if len(parts) == 0 {
+        return ""
+    }
+    seen := make(map[string]struct{}, len(parts))
+    out := make([]string, 0, len(parts))
+    for _, p := range parts {
+        if p == "" {
+            continue
+        }
+        if _, ok := seen[p]; ok {
+            continue
+        }
+        seen[p] = struct{}{}
+        out = append(out, p)
+    }
+    return strings.Join(out, ",")
+}

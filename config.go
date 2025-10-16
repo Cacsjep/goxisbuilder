@@ -30,4 +30,5 @@ type BuildConfiguration struct {
 	FilesToAdd    string
 	SdkVersion    string
 	IgnoreDirs    []string
+	BuildTags     string
 }
