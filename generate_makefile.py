@@ -28,6 +28,8 @@ TAGS_ARG := $(if $(strip $(GO_BUILD_TAGS)),-tags \"$(GO_BUILD_TAGS)\",)
 
 build:
 \tgo build $(TAGS_ARG) -ldflags \"-s -w  -extldflags '-L./lib -Wl,-rpath,./lib'\" -o {app_name} .
+\t# Compress binary with UPX for smallest possible size
+\tupx --best --lzma {app_name}
 """
     
     print("Creating Makefile with content:")

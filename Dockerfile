@@ -35,6 +35,9 @@ ENV GOPATH="/go" \
     GO_APP=${GO_APP} \
     GO_BUILD_TAGS=${GO_BUILD_TAGS}
 
+
+RUN apt-get update && apt-get install -y upx-ucl
+
 RUN mkdir ${APP_DIR}
 
 #-------------------------------------------------------------------------------
