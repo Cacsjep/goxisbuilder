@@ -22,18 +22,19 @@ func main() {
 	arch := flag.String("arch", "aarch64", "The architecture for the ACAP application: 'aarch64' or 'armv7hf'.")
 	doStart := flag.Bool("start", false, "Set to true to start the application after installation.")
 	createProject := flag.Bool("newapp", false, "Generate a new goxis app.")
-	sdk_version := flag.String("sdk", "", "The version of the SDK to use. (blank = 12.2.0)")
+	sdk_version := flag.String("sdk", "", "The version of the SDK to use. (blank = 12.7.0)")
 	ubunutu_version := flag.String("ubunutu", "", "The Ubunut version to use. (blank = 24.04)")
 	doInstall := flag.Bool("install", false, "Set to true to install the application on the camera.")
 	notCopy := flag.Bool("nocopy", false, "Set to true if you dont want to copy the eap file to host machine.")
 	prune := flag.Bool("prune", false, "Set to true execute 'docker system prune -f' after build.")
 	lowestSdkVersion := flag.Bool("lowsdk", false, "Set to true to build with acap-sdk version 3.5 and ubunutu 20.04")
 	watch := flag.Bool("watch", false, "Set to true to monitor the package log after building.")
+	upx := flag.Bool("upx", true, "Enable UPX compression of the Go binary (pass -upx=false to disable).")
 	appDirectory := flag.String("appdir", "", "The path to the application directory from which to build, or blank if the current directory is the application directory.")
 	filesToAdd := flag.String("files", "", "Add additional files to the container. (filename1 filename2 directory ...), files need to be in appdir")
-    ignoreDirs := flag.String("ignore", "", "Ignore directories in the appdir. (directory1 directory2 ...), directories need to be in appdir")
-    tags := flag.String("tags", "", "Go build tags to pass to 'go build -tags'. Accepts space- or comma-separated values; normalized to comma-separated.")
-    flag.Parse()
+	ignoreDirs := flag.String("ignore", "", "Ignore directories in the appdir. (directory1 directory2 ...), directories need to be in appdir")
+	tags := flag.String("tags", "", "Go build tags to pass to 'go build -tags'. Accepts space- or comma-separated values; normalized to comma-separated.")
+	flag.Parse()
 
 	if *showHelp {
 		flag.Usage()
@@ -80,10 +81,10 @@ func main() {
 		handleError(fmt.Sprintf("Failed to load manifest from %s", manifestPathFull), err)
 	}
 
-    // Normalize tags to the modern, comma-separated form used by Go
-    normalizedTags := normalizeGoBuildTags(*tags)
+	// Normalize tags to the modern, comma-separated form used by Go
+	normalizedTags := normalizeGoBuildTags(*tags)
 
-    buildConfig := BuildConfiguration{
+	buildConfig := BuildConfiguration{
 		AppDirectory:  *appDirectory,
 		Arch:          *arch,
 		Manifest:      amf,
@@ -101,9 +102,10 @@ func main() {
 		ImageName:     fmt.Sprintf("%s:%s", *arch, amf.ACAPPackageConf.Setup.AppName),
 		SdkVersion:    *sdk_version,
 		UbunutVersion: *ubunutu_version,
-        IgnoreDirs:    strings.Fields(*ignoreDirs),
-        BuildTags:     normalizedTags,
-    }
+		IgnoreDirs:    strings.Fields(*ignoreDirs),
+		BuildTags:     normalizedTags,
+		EnableUpx:     *upx,
+	}
 	// Configure SDK and architecture for the specific app
 	configureSdk(*lowestSdkVersion, &buildConfig)
 	configureArchitecture(*arch, &buildConfig)

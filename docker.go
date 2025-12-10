@@ -106,6 +106,7 @@ func dockerBuild(ctx context.Context, cli *client.Client, bc *BuildConfiguration
 			"GO_APP":               ptr(bc.AppDirectory),
 			"FILES_TO_ADD_TO_ACAP": ptr(files_to_add),
 			"GO_BUILD_TAGS":        ptr(bc.BuildTags),
+			"ENABLE_UPX":           ptr(boolToStr(bc.EnableUpx)),
 		},
 		Remove:      true,
 		ForceRemove: true,

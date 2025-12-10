@@ -31,4 +31,5 @@ type BuildConfiguration struct {
 	SdkVersion    string
 	IgnoreDirs    []string
 	BuildTags     string
+	EnableUpx     bool
 }

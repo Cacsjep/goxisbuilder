@@ -4,6 +4,14 @@
 import os
 import sys
 
+def should_enable_upx():
+    """Return True when UPX should run; default is enabled."""
+    value = os.environ.get("ENABLE_UPX", "YES")
+    normalized = value.strip().lower()
+    if normalized in {"0", "false", "no", "n"}:
+        return False
+    return True
+
 def create_makefile(app_name, appdir, manifest_file_name):
     if appdir != ".":
         default_manifest = os.path.join(appdir, "manifest.json")
@@ -20,6 +28,15 @@ def create_makefile(app_name, appdir, manifest_file_name):
         print(f"Manifest renamed from {manifest_file_name} to {default_manifest}")
 
     # Create the Makefile content
+    enable_upx = should_enable_upx()
+    if not enable_upx:
+        print("UPX compression disabled via ENABLE_UPX flag.")
+    upx_lines = ""
+    if enable_upx:
+        upx_lines = f"""\t# Compress binary with UPX for smallest possible size
+\tupx --best --lzma {app_name}
+"""
+
     makefile_content = f"""
 .PHONY: build
 
@@ -28,8 +45,7 @@ TAGS_ARG := $(if $(strip $(GO_BUILD_TAGS)),-tags \"$(GO_BUILD_TAGS)\",)
 
 build:
 \tgo build $(TAGS_ARG) -ldflags \"-s -w  -extldflags '-L./lib -Wl,-rpath,./lib'\" -o {app_name} .
-\t# Compress binary with UPX for smallest possible size
-\tupx --best --lzma {app_name}
+{upx_lines}
 """
     
     print("Creating Makefile with content:")

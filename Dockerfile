@@ -22,6 +22,7 @@ ARG INSTALL=
 ARG FILES_TO_ADD_TO_ACAP=
 ARG GO_APP=test
 ARG GO_BUILD_TAGS=
+ARG ENABLE_UPX=YES
 
 ENV GOPATH="/go" \
     PATH="${GOPATH}/bin:/usr/local/go/bin:${PATH}" \
@@ -33,7 +34,8 @@ ENV GOPATH="/go" \
     ACAP_FILES=${FILES_TO_ADD_TO_ACAP} \
     MANIFEST=${APP_MANIFEST} \
     GO_APP=${GO_APP} \
-    GO_BUILD_TAGS=${GO_BUILD_TAGS}
+    GO_BUILD_TAGS=${GO_BUILD_TAGS} \
+    ENABLE_UPX=${ENABLE_UPX}
 
 
 RUN apt-get update && apt-get install -y upx-ucl

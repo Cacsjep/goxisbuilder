@@ -1,121 +1,132 @@
-## Goxisbuilder
+# Goxisbuilder
 
-Goxisbuilder is a powerful command-line tool designed to streamline the process of building Docker ACAP applications for Go developers. 
-Its main purpose is to build apps with [goxis](https://github.com/Cacsjep/goxis).
+Goxisbuilder is a CLI helper that packages Go applications into Docker-based ACAP deployments. It wraps the [`goxis`](https://github.com/Cacsjep/goxis) toolchain with sensible defaults, automatic Makefile generation, and helpers for installing/running packages on Axis cameras.
 
-### Install
-```shell
+## Install
+
+Install the latest release with `go install`:
+
+```sh
 go install github.com/Cacsjep/goxisbuilder@latest
 ```
 
-> [!NOTE] 
-> MAC OS: If you not already have **go bin directory** in your path you need to perform `export PATH=$PATH:$HOME/go/bin`
+On macOS, make sure your Go bin directory is on `PATH` before running the command:
 
-### Quick Start (New Project)
-Creating a new project is very handy, it creates an application directory with all the necessary stuff inside. :)
-```shell
+```sh
+export PATH="$PATH:$HOME/go/bin"
+```
+
+## Quick start (new project)
+
+Use the bundled template to create a skeleton project:
+
+```sh
 goxisbuilder.exe -newapp
 ```
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20us-blue?style=for-the-badge&logo=discord)](https://discord.gg/we6EqDSJ)
+It will drop a single application directory with a basic `manifest.json`, a working Go module, and a `LICENSE` file so you can jump straight into development.
 
-### Building Applications
-There are two ways of building apps with goxisbuilder:
-- Inside an application directory
-- Outside an application directory"
+## Building applications
 
-#### Inside a Applications Directory
-Build command: `goxisbuilder.exe` or on linux `goxisbuilder`
+After you have an application, there are two ways to run a build:
 
-Directory/File Structure:
-* myacap
-   * go.sum
-   * go.mod
-   * *.go (app.go or main.go does not matter) 
-   * manifest.json
-   * LICENSE
+### Inside the application directory
 
-
-> [!NOTE] 
-> After a successful build, a **build** directory with the corresponding .eap file is created.
-
-#### Outside a Applications Directory
-Build command: `goxisbuilder.exe -appdir=<application-director>` or on linux `goxisbuilder -appdir=<application-director>`
-
-Directory/File Structure:
-* myproject
-   * go.sum
-   * go.mod
-     * myacap1
-       * *.go (It does not matter whether you use app.go or main.go.) 
-       * manifest.json
-       * LICENSE
-     * myacap2
-       * *.go (It does not matter whether you use app.go or main.go.) 
-       * manifest.json
-       * LICENSE
-
-> [!NOTE] 
-> After a successful build, a **build** directory with the corresponding .eap file is created.
-
-### Start, Install, Watch
-To install and start the ACAP application after building it, add the `-install`  and `-start`  flags. Also, specify the `-ip <camera IP address>`  and `-pwd <camera root password>`  flags.
-
-If you are interested in viewing the syslog output of the ACAP application, add the `-watch`  flag. (Note: IP address and password are required.)
-
-### Additional ACAP/EAP Package files
-When deploying ACAPs, such as those with machine learning models, it's necessary to bundle model files into the .eap package.
-
-Simply use the `-files` argument to specify which files goxisbuilder should bundle.
-
-> [!IMPORTANT] 
-> These files need to be in the Application Directory.
-
-#### Example
-```
-goxisbuilder.exe -files=ssd_mobilenet_v2_coco_quant_postprocess.tflite
+```sh
+cd myacap
+goxisbuilder.exe
 ```
 
-### Custom Dockerfile
-To use your own Dockerfile, add the `-dockerfile` flag and base it on the repository's *Dockerfile*.
+The command expects the working directory to contain:
 
-### Multiple Manifests
-In case of multiple manifest files for an application, you can use the `-manifest` flag to specify which manifest file to use for the build.
+- `go.mod` / `go.sum`
+- One or more `.go` sources (`app.go`, `main.go`, etc.)
+- `manifest.json` and `LICENSE`
 
-### Ignore dirs or files
-Files or directories can be excluded from being copied into the container by prefixing their names with an underscore.
+On success, a `build/` directory with the generated `.eap` file is created alongside your source.
 
-### Usage
-```shell
+### Outside (multi-application workspace)
+
+```sh
+goxisbuilder.exe -appdir=myproject
+```
+
+Each subdirectory under `myproject` that follows the single-app layout described above will be built and packaged. This is useful for monorepos or workspaces that keep multiple ACAPs together.
+
+## Common workflows
+
+| Flag         | Description |
+|--------------|-------------|
+| `-h`         | Show help. |
+| `-appdir`    | Path to the application directory when invoking from a parent workspace. |
+| `-arch`      | Target architecture (`aarch64` or `armv7hf`; defaults to `aarch64`). |
+| `-dockerfile`| Provide a custom Dockerfile (should derive from this repo's template). |
+| `-files`     | Space- or comma-separated files/directories to bundle in the final `.eap`. |
+| `-install`   | Install the package on the camera after building (requires `-ip`/`-pwd`). |
+| `-nocopy`    | Skip copying the resulting `.eap` file back to the host. |
+| `-ip` / `-pwd` | IP address and root password for installation/start/watch commands. |
+| `-lowsdk`    | Use older ACAP SDK (v3.5 on Ubuntu 20.04). |
+| `-manifest`  | Path to the manifest (defaults to `manifest.json`). |
+| `-newapp`    | Generate a new application scaffold. |
+| `-prune`     | Run `docker system prune -f` after the build completes. |
+| `-start`     | Start the installed package on the camera. |
+| `-sdk`       | Specify the SDK version, e.g., `-sdk=12.2.0`. |
+| `-watch`     | Tail the app log on the camera after installing. |
+| `-tags`      | Go build tags forwarded through Docker/Makefile (space/comma separated). |
+| `-upx`       | Enable compression of the Go binary with UPX (`true` by default). |
+
+## Optional helpers
+
+- **Install + start + watch**: Combine `-install -start -watch` with `-ip`/`-pwd` to deploy the build to a camera and stream its log via syslog.
+- **Additional assets**: `-files` can point to model weights, configuration, or other assets that should be bundled inside the `.eap`. These paths must live in the application directory.
+- **Custom Dockerfile**: Pass `-dockerfile` to override the internal Docker template. The custom file should mimic the Dockerfile in this repository.
+- **Multiple manifest files**: Use `-manifest=path/to/alternate.json` when more than one manifest exists for the same app.
+- **Go tags**: `-tags="prod netcgo"` becomes `GO_BUILD_TAGS` in the generated Makefile and is normalized to a comma-separated list.
+- **No-copy deployments**: Add `-nocopy` when you only need to install/start/watch the application on the camera and do not care about retaining the `.eap` locally; it keeps the build artifacts inside `build/` on the container instead of copying them back to your drive.
+
+## Custom SDK, OS, and architecture targets
+
+Pass `-sdk`, `-arch`, and `-ubunutu` (sic) to target a particular Axis OS version and runtime. Include `-manifest` if your app ships multiple manifests, plus `-ignore` to keep large directories (such as `.git`) out of the Docker context.
+
+### Axis OS 11.11 example
+
+```sh
+goxisbuilder.exe -appdir "./ax_msf" \
+  -install -ip 10.0.0.48 -pwd 1qay2wsx \
+  -sdk "1.15" -ubunutu "22.04" \
+  -manifest "manifestv11.json" \
+  -tags "prod" -arch aarch64 \
+  -ignore ".git web website"
+```
+
+### Axis OS 12.5 example
+
+```sh
+goxisbuilder.exe -appdir "./ax_msf" \
+  -install -ip 10.0.0.48 -pwd 1qay2wsx \
+  -sdk "12.5.0" -watch \
+  -tags "prod" -arch aarch64 \
+  -ignore ".git web website"
+```
+
+The `-ignore` flag accepts space-separated values and behaves like the `_` prefix in the application directory: matching paths are excluded from the Docker build context, so the ones listed above (especially version control directories) are never copied into the container.
+
+## Build behavior you should know
+
+- **UPX compression**: The Docker image installs `upx-ucl` (see [Dockerfile](Dockerfile)) and compresses the Go binary with `upx --best --lzma` by default. You can disable it per build with `-upx=false`.
+- **Ignored files**: Prefix a file or directory name with `_` to keep it out of the Docker context. This prevents large git history (e.g., `.git/`) or other build artifacts from being copied into the container. The builder never copies files that begin with `_`.
+- **Build artifacts**: The `build/` directory is always recreated alongside your source and holds the `.eap`. Use `-nocopy` if you do not want to copy the `.eap` back to the host volume, for example when building solely to install on a camera.
+- **Docker pruning**: `-prune` removes dangling Docker data after the build, which keeps disk usage down but adds runtime to the command.
+
+## Usage reminders
+
+```sh
 .\goxisbuilder.exe -h
 ```
 
-| Flag                | Description                                                                                                                      | Default           |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `-h`                | Displays this help message.                                                                                                      |                   |
-| `-appdir`           | The path to the application directory from which to build.                                                                       | `""`              |
-| `-arch`             | The architecture for the ACAP application: 'aarch64' or 'armv7hf'.                                                               | `"aarch64"`       |
-| `-dockerfile`       | Use your own dockerfile                                                                                                          | `""`              |
-| `-files`            | Files for adding to the acap eap package like larod models (filename1 filename2 directory)                                             | `""`              |
-| `-install`          | Set to true to install the application on the camera.                                                                            | `false`           |
-| `-nocopy`             | Set to true when you dont need the eap file after build.                                                                        | `false`           |
-| `-ip`               | The IP address of the camera where the EAP application is installed.                                                             | `""`              |
-| `-lowsdk`           | Set to true to build with acap-sdk version 3.5 and ubunutu 20.04                                                                 | `false`           |
-| `-manifest`         | The path to the manifest file. Defaults to 'manifest.json'.                                                                      | `"manifest.json"` |
-| `-newapp  `         | Generate a new goxis application                                                                                                 | `false`           |
-| `-prune`            | Set to true execute 'docker system prune -f' after build.                                                                        | `false`           |
-| `-pwd`              | The root password for the camera where the EAP application is installed.                                                         | `""`              |
-| `-start`            | Set to true to start the application after installation.                                                                         | `false`           |
-| `-sdk`              | Set to specifiy the sdk version for the ACAP image like, for example -version 1.12                                               | `12.2.0`           |
-| `-watch`            | Set to true to monitor the package log after building.                                                                           | `false`           |
-| `-tags`             | Go build tags passed through Docker to Makefile and applied to `go build -tags`. Accepts space- or comma-separated values; normalized to comma-separated.           | `""`              |
+Use the generated help output for a quick flag reference if you forget a parameter name.
 
-#### Build tags examples
-- Single tag: `.\goxisbuilder.exe -tags=prod`
-- Multiple tags (space): `.\goxisbuilder.exe -tags="prod netcgo"`
-- Multiple tags (comma): `.\goxisbuilder.exe -tags=prod,netcgo`
+## Further reading
 
-These are forwarded to Docker as `GO_BUILD_TAGS` and used by the generated Makefile. Tags are normalized to a comma-separated list internally.
-
-
-
+- `generate_makefile.py` - shows how the Makefile gets generated for each build.
+- `Dockerfile` - contains the runtime stack, UPX installation, and environment variables that get baked into the build container.

@@ -136,7 +136,7 @@ func configureSdk(lowestSdkVersion bool, buildConfig *BuildConfiguration) {
 		if buildConfig.SdkVersion != "" {
 			buildConfig.Version = buildConfig.SdkVersion
 		} else {
-			buildConfig.Version = "12.2.0"
+			buildConfig.Version = "12.7.0"
 		}
 	}
 	fmt.Println("Using SDK:", buildConfig.Sdk)
@@ -209,6 +209,11 @@ func printCompatibility(buildConfig *BuildConfiguration) {
 		"12.0.0": "12.0 and later until LTS",
 		"12.1.0": "12.1 and later until LTS",
 		"12.2.0": "12.2 and later until LTS",
+		"12.3.0": "12.2 and later until LTS",
+		"12.4.0": "12.2 and later until LTS",
+		"12.5.0": "12.2 and later until LTS",
+		"12.6.0": "12.2 and later until LTS",
+		"12.7.0": "12.7 and later until LTS",
 	}
 
 	// Check if it's using the native SDK or standard SDK
@@ -241,6 +246,8 @@ func printCompatibility(buildConfig *BuildConfiguration) {
 		"1.7.1": "12.0",
 		"1.7.2": "12.1",
 		"1.7.3": "12.2",
+		"1.7.4": "12.4",
+		"1.8.0": "12.6",
 	}
 
 	if firmware, ok := schemaToFirmware[buildConfig.Manifest.SchemaVersion]; ok {
@@ -270,27 +277,27 @@ func printCompatibility(buildConfig *BuildConfiguration) {
 // either space- or comma-separated form, trims whitespace, removes empty
 // entries, and de-duplicates while preserving order.
 func normalizeGoBuildTags(s string) string {
-    s = strings.TrimSpace(s)
-    if s == "" {
-        return ""
-    }
-    // Treat commas as separators, then split on any whitespace
-    s = strings.ReplaceAll(s, ",", " ")
-    parts := strings.Fields(s)
-    if len(parts) == 0 {
-        return ""
-    }
-    seen := make(map[string]struct{}, len(parts))
-    out := make([]string, 0, len(parts))
-    for _, p := range parts {
-        if p == "" {
-            continue
-        }
-        if _, ok := seen[p]; ok {
-            continue
-        }
-        seen[p] = struct{}{}
-        out = append(out, p)
-    }
-    return strings.Join(out, ",")
+	s = strings.TrimSpace(s)
+	if s == "" {
+		return ""
+	}
+	// Treat commas as separators, then split on any whitespace
+	s = strings.ReplaceAll(s, ",", " ")
+	parts := strings.Fields(s)
+	if len(parts) == 0 {
+		return ""
+	}
+	seen := make(map[string]struct{}, len(parts))
+	out := make([]string, 0, len(parts))
+	for _, p := range parts {
+		if p == "" {
+			continue
+		}
+		if _, ok := seen[p]; ok {
+			continue
+		}
+		seen[p] = struct{}{}
+		out = append(out, p)
+	}
+	return strings.Join(out, ",")
 }
