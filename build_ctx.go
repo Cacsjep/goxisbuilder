@@ -77,7 +77,7 @@ func createBuildContext(baseDir string, dockerfile string, ingoreDirectors []str
 		}
 		if !info.IsDir() {
 			// Write file content
-			fmt.Println("Adding file to tar:", fixedPath)
+			fmt.Println("Copy file into docker ctx:", fixedPath)
 			file, err := os.Open(path)
 			if err != nil {
 				return err
