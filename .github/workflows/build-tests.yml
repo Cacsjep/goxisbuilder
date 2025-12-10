@@ -26,7 +26,7 @@ jobs:
           - name: additional-files
             flags: "-appdir samples/testapp -files=README.md"
           - name: ignored-paths
-            flags: "-appdir samples/testapp -ignore '.git build'"
+            flags: "-appdir samples/testapp -ignore='.git build'"
           - name: keep-clean
             flags: "-appdir samples/testapp -prune"
           - name: no-copy
