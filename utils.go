@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -168,6 +169,10 @@ Loop:
 func listEapDirectory() {
 	entries, err := os.ReadDir("./build")
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			log.Println("Build directory is missing (probably skipped by -nocopy); skipping listing.")
+			return
+		}
 		log.Fatal(err)
 	}
 
