@@ -14,21 +14,17 @@ jobs:
           - name: default
             flags: "-appdir samples/testapp"
           - name: upx-disabled
-            flags: "-appdir samples/testapp -upx=false"
+            flags: "-appdir samples/testapp -ignore='.git build' -upx=false"
           - name: prod-tag
-            flags: "-appdir samples/testapp -tags=prod"
+            flags: "-appdir samples/testapp -ignore='.git build' -tags=prod"
           - name: prod-netcgo-tags
-            flags: "-appdir samples/testapp -tags='prod netcgo'"
+            flags: "-appdir samples/testapp -ignore='.git build' -tags='prod netcgo'"
           - name: sdk-125-arch
             flags: '-appdir samples/testapp -sdk "12.5.0" -arch=aarch64'
           - name: sdk-115-arm
-            flags: '-appdir samples/testapp -sdk "1.15" -ubunutu "22.04" -manifest "manifestv11.json"'
+            flags: '-appdir samples/testapp -ignore=".git build" -sdk "1.15" -ubunutu "22.04" -manifest "manifestv11.json"'
           - name: additional-files
-            flags: "-appdir samples/testapp -files=README.md"
-          - name: ignored-paths
-            flags: "-appdir samples/testapp -ignore='.git build'"
-          - name: keep-clean
-            flags: "-appdir samples/testapp -prune"
+            flags: "-appdir samples/testapp -ignore='.git build' -files=README.md"
           - name: no-copy
             flags: "-appdir samples/testapp -nocopy"
     steps:
