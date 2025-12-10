@@ -1,0 +1,48 @@
+name: Build matrix
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        combo:
+          - name: default
+            flags: "-appdir samples/testapp"
+          - name: upx-disabled
+            flags: "-appdir samples/testapp -upx=false"
+          - name: prod-tag
+            flags: "-appdir samples/testapp -tags=prod"
+          - name: prod-netcgo-tags
+            flags: "-appdir samples/testapp -tags='prod netcgo'"
+          - name: sdk-125-arch
+            flags: "-appdir samples/testapp -sdk=12.5.0 -arch=aarch64"
+          - name: sdk-115-arm
+            flags: "-appdir samples/testapp -sdk=1.15 -arch=armv7hf -ubunutu=22.04"
+          - name: additional-files
+            flags: "-appdir samples/testapp -files=README.md"
+          - name: ignored-paths
+            flags: "-appdir samples/testapp -ignore '.git build'"
+          - name: keep-clean
+            flags: "-appdir samples/testapp -prune"
+          - name: no-copy
+            flags: "-appdir samples/testapp -nocopy"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+
+      - name: Build goxisbuilder
+        run: go build -o goxisbuilder .
+
+      - name: Run build variation
+        run: |
+          ./goxisbuilder ${{ matrix.combo.flags }}
