@@ -4,7 +4,7 @@
     "setup": {
       "appName": "test",
       "embeddedSdkVersion": "3.5",
-      "friendlyName": "Missing Features",
+      "friendlyName": "Test App",
       "runMode": "respawn",
       "vendor": "goxis",
       "version": "0.0.1"
