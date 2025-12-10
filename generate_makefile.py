@@ -16,9 +16,20 @@ def create_makefile(app_name, appdir, manifest_file_name):
         make_file_path = "Makefile"
     if custom_manifest != default_manifest:
         if os.path.exists(default_manifest): 
+            print(f"Removing existing default manifest: {default_manifest}")
             os.remove(default_manifest)
+        print(f"Renaming {custom_manifest} to {default_manifest}")
         os.rename(custom_manifest, default_manifest)
         print(f"Manifest renamed from {manifest_file_name} to {default_manifest}")
+        # Verify the rename worked by reading the schema version
+        try:
+            import json
+            with open(default_manifest, 'r') as f:
+                manifest_data = json.load(f)
+                schema_version = manifest_data.get('schemaVersion', 'unknown')
+                print(f"Verified: {default_manifest} now has schemaVersion: {schema_version}")
+        except Exception as e:
+            print(f"Warning: Could not verify manifest content: {e}")
 
     # Create the Makefile content
 

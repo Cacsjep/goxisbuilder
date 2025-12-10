@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.7.0",
   "acapPackageConf": {
-      "setup": {
-          "appName": "test",
-          "embeddedSdkVersion": "3.5",
-          "friendlyName": "Missing Features",
-          "runMode": "respawn",
-          "vendor": "goxis",
-          "version": "0.0.1"
-      }
+    "setup": {
+      "appName": "test",
+      "embeddedSdkVersion": "3.5",
+      "friendlyName": "Missing Features",
+      "runMode": "respawn",
+      "vendor": "goxis",
+      "version": "0.0.1"
+    }
   }
 }
