@@ -63,10 +63,11 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . ${APP_DIR}
-WORKDIR ${APP_DIR}
-RUN python generate_makefile.py ${APP_NAME} ${GO_APP} ${APP_MANIFEST}
 WORKDIR ${APP_DIR}/${GO_APP}
-RUN . /opt/axis/acapsdk/environment-setup* && \
+RUN cd ${APP_DIR} && \
+    python generate_makefile.py ${APP_NAME} ${GO_APP} ${APP_MANIFEST} && \
+    cd ${APP_DIR}/${GO_APP} && \
+    . /opt/axis/acapsdk/environment-setup* && \
     make build && \
     if [ "$ENABLE_UPX" = "YES" ]; then \
         echo "Compressing binary with UPX..."; \
