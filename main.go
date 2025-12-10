@@ -27,7 +27,7 @@ func main() {
 	doInstall := flag.Bool("install", false, "Set to true to install the application on the camera.")
 	notCopy := flag.Bool("nocopy", false, "Set to true if you dont want to copy the eap file to host machine.")
 	prune := flag.Bool("prune", false, "Set to true execute 'docker system prune -f' after build.")
-	lowestSdkVersion := flag.Bool("lowsdk", false, "Set to true to build with acap-sdk version 3.5 and ubunutu 20.04")
+
 	watch := flag.Bool("watch", false, "Set to true to monitor the package log after building.")
 	upx := flag.Bool("upx", true, "Enable UPX compression of the Go binary (pass -upx=false to disable).")
 	appDirectory := flag.String("appdir", "", "The path to the application directory from which to build, or blank if the current directory is the application directory.")
@@ -85,16 +85,16 @@ func main() {
 	normalizedTags := normalizeGoBuildTags(*tags)
 
 	buildConfig := BuildConfiguration{
-		AppDirectory:  *appDirectory,
-		Arch:          *arch,
-		Manifest:      amf,
-		ManifestPath:  *manifestPath,
-		Ip:            *ip,
-		Pwd:           *pwd,
-		DoStart:       *doStart,
-		DoInstall:     *doInstall,
-		NotCopy:       *notCopy,
-		LowestSdk:     *lowestSdkVersion,
+		AppDirectory: *appDirectory,
+		Arch:         *arch,
+		Manifest:     amf,
+		ManifestPath: *manifestPath,
+		Ip:           *ip,
+		Pwd:          *pwd,
+		DoStart:      *doStart,
+		DoInstall:    *doInstall,
+		NotCopy:      *notCopy,
+
 		Watch:         *watch,
 		Dockerfile:    *dockerFile,
 		FilesToAdd:    *filesToAdd,
@@ -107,7 +107,7 @@ func main() {
 		EnableUpx:     *upx,
 	}
 	// Configure SDK and architecture for the specific app
-	configureSdk(*lowestSdkVersion, &buildConfig)
+	configureSdk(&buildConfig)
 	configureArchitecture(*arch, &buildConfig)
 
 	if err := buildAndRunContainer(ctx, cli, &buildConfig); err != nil {

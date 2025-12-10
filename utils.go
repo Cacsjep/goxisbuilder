@@ -119,26 +119,16 @@ func configureArchitecture(arch string, buildConfig *BuildConfiguration) {
 	}
 }
 
-// configureSdk sets up the build configuration based on the lowest Sdk flag.
-func configureSdk(lowestSdkVersion bool, buildConfig *BuildConfiguration) {
-	if lowestSdkVersion {
-		buildConfig.Sdk = "acap-sdk"
-		buildConfig.UbunutVersion = "20.04"
-		if buildConfig.SdkVersion != "" {
-			buildConfig.Version = buildConfig.SdkVersion
-		} else {
-			buildConfig.Version = "3.5"
-		}
+// configureSdk sets up the build configuration based on the Sdk flags.
+func configureSdk(buildConfig *BuildConfiguration) {
+	buildConfig.Sdk = "acap-native-sdk"
+	if buildConfig.UbunutVersion == "" {
+		buildConfig.UbunutVersion = "24.04"
+	}
+	if buildConfig.SdkVersion != "" {
+		buildConfig.Version = buildConfig.SdkVersion
 	} else {
-		buildConfig.Sdk = "acap-native-sdk"
-		if buildConfig.UbunutVersion == "" {
-			buildConfig.UbunutVersion = "24.04"
-		}
-		if buildConfig.SdkVersion != "" {
-			buildConfig.Version = buildConfig.SdkVersion
-		} else {
-			buildConfig.Version = "12.7.0"
-		}
+		buildConfig.Version = "12.7.0"
 	}
 	fmt.Println("Using SDK:", buildConfig.Sdk)
 	fmt.Println("Using SDK version:", buildConfig.Version)

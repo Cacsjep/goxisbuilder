@@ -40,6 +40,9 @@ ENV GOPATH="/go" \
 
 RUN apt-get update && apt-get install -y upx-ucl
 
+
+
+
 RUN mkdir ${APP_DIR}
 
 #-------------------------------------------------------------------------------
@@ -63,7 +66,13 @@ COPY . ${APP_DIR}
 WORKDIR ${APP_DIR}
 RUN python generate_makefile.py ${APP_NAME} ${GO_APP} ${APP_MANIFEST}
 WORKDIR ${APP_DIR}/${GO_APP}
-RUN . /opt/axis/acapsdk/environment-setup* && acap-build . ${ACAP_FILES} || (echo "acap-build error" && exit 1)
+RUN . /opt/axis/acapsdk/environment-setup* && \
+    make build && \
+    if [ "$ENABLE_UPX" = "YES" ]; then \
+        echo "Compressing binary with UPX..."; \
+        upx --best --lzma ${APP_NAME} || echo "UPX failed, continuing with uncompressed binary"; \
+    fi && \
+    acap-build . ${ACAP_FILES} || (echo "acap-build error" && exit 1)
 
 # Install ACAP only if INSTALL=YES
 RUN . /opt/axis/acapsdk/environment-setup* && if [ "$INSTALL" = "YES" ]; then eap-install.sh ${IP_ADDR} ${PASSWORD} install || (echo "acap-build error install" && exit 1); fi

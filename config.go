@@ -24,7 +24,7 @@ type BuildConfiguration struct {
 	GoArch        string
 	GoArm         string
 	CrossPrefix   string
-	LowestSdk     bool
+
 	Watch         bool
 	Dockerfile    string
 	FilesToAdd    string
