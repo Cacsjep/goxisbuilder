@@ -19,7 +19,7 @@ func main() {
 	manifestPath := flag.String("manifest", "manifest.json", "The path to the manifest file. Defaults to 'manifest.json'.")
 	dockerFile := flag.String("dockerfile", "", "Use a custom docker file'.")
 	pwd := flag.String("pwd", "", "The root password for the camera where the EAP application is installed.")
-	arch := flag.String("arch", "aarch64", "The architecture for the ACAP application: 'aarch64' or 'armv7hf'.")
+	arch := flag.String("arch", "aarch64", "The arch for the ACAP application: 'aarch64' or 'armv7hf'.")
 	doStart := flag.Bool("start", false, "Set to true to start the application after installation.")
 	createProject := flag.Bool("newapp", false, "Generate a new goxis app.")
 	sdk_version := flag.String("sdk", "", "The version of the SDK to use. (blank = 12.7.0)")
